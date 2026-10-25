@@ -104,20 +104,20 @@ main > :last-child { padding-bottom: var(--gap); }
   .sec-head { grid-template-columns: 1fr; min-height: 0; }
 }
 
-/* ---------- home: an honest way out, first ---------- */
-.hurry-tile { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 12px 32px; align-items: center; padding-top: 18px; padding-bottom: 18px; }
-.hurry-text { font-size: var(--t4); max-width: 46ch; }
+/* ---------- home: the honest way out, right under the headline ---------- */
+.hurry { display: grid; gap: 12px; padding: 18px 20px; background: rgba(245, 245, 242, .1); max-width: 64ch; }
+.hurry-text { font-size: var(--t4); }
 .hurry-links { display: flex; flex-wrap: wrap; gap: 6px; }
-.hurry-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; background: var(--paper); text-decoration: none; font-size: .9375rem;
-  transition: background-color .2s ease; }
-.hurry-links a:first-child { background: var(--ink); color: var(--paper); }
-@media (hover: hover) and (pointer: fine) { .hurry-links a:hover { background: var(--pink); color: var(--ink); } }
-.hurry-after { grid-column: 1 / -1; color: var(--soft); }
-@media (max-width: 900px) { .hurry-tile { grid-template-columns: 1fr; } .hurry-links a { flex: 1 1 calc(50% - 6px); } }
+.hurry-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; background: var(--paper); color: var(--ink); text-decoration: none;
+  font-size: .9375rem; transition: background-color .2s ease; }
+.hurry-links a:first-child { background: var(--pink); }
+@media (hover: hover) and (pointer: fine) { .hurry-links a:hover { background: var(--blush); } }
+.hurry-after { font-size: var(--t5); color: var(--blush); }
+@media (max-width: 560px) { .hurry-links a { flex: 1 1 calc(50% - 6px); } }
 
 /* ---------- home: the city's story ---------- */
-.story-head .t { min-height: calc(100svh - var(--bar) - 190px); }
-.story { display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding-top: clamp(32px, 4vw, 56px); }
+.story-head .t { min-height: calc(100svh - var(--bar) - 16px); }
+.story { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding-top: clamp(32px, 4vw, 56px); }
 .story h1 { font-size: var(--t1); line-height: .92; letter-spacing: -0.045em; max-width: 12ch; }
 .story .statement { max-width: 40ch; }
 .story .src a { color: var(--blush); }

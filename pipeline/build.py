@@ -346,13 +346,13 @@ class Site:
         Y = H["hurry"]
         hrefs = {"cafe": f"{self.cafe}/"}
         links = "".join(f'<a href="{hrefs.get(h, h)}">{E(t)}</a>' for h, t in Y["links"])
-        hurry = f"""<section class="board hurry" aria-label="Skip to what you came for">
-  <div class="t tone-stone s12 hurry-tile rv"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
-  <p class="hurry-after small">{self.f(Y['after'])}</p></div>
-</section>"""
+        hurry = f"""<div class="hurry"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
+    <p class="hurry-after">{self.f(Y['after'])}</p></div>"""
         V = H["hero"]
         hero = f"""<section class="board story-head" aria-labelledby="hero-h">
-  <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1><p class="statement">{self.f(V['text'])}</p>
+  <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1>
+    {hurry}
+    <p class="statement">{self.f(V['text'])}</p>
     <p class="small src"><a href="{src['url']}" rel="noopener">{E(src['name'])}</a></p></div>
   {self.photo_tile("pink-bazaar", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw", eager=True)}
 </section>"""
@@ -422,7 +422,7 @@ class Site:
         ld = [{"@type": "ItemList", "name": f"{self.brand}: industry sites", "itemListElement": [
             {"@type": "ListItem", "position": n + 1, "item": {"@type": "WebSite", "name": i["name"], "url": f"{i['url']}/"}}
             for n, i in enumerate(live)]}]
-        return self.page("", self.p(H["title"]), self.p(H["description"]), "\n".join([hurry, hero, history, bridge, picker, close]), ld, "home")
+        return self.page("", self.p(H["title"]), self.p(H["description"]), "\n".join([hero, history, bridge, picker, close]), ld, "home")
 
     def cafes(self):
         pre, P = "../", self.C["cafes"]
