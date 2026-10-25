@@ -43,10 +43,12 @@ PHOTOS = {
                 "Sabrianna", "https://unsplash.com/photos/jYVvmAi4u8c", 1600, 1067),
     "coffee": ("A glass of coffee on a blue saucer on a wooden café table", "Coffee",
                "Parakram Singh", "https://unsplash.com/photos/VIv4QzCd2Xc", 1600, 2133),
+    "pink-bazaar": ("Pink and red shopfronts with domed pavilions above a busy bazaar street in Jaipur, lit at dusk", "A bazaar street in the Pink City",
+                    "Mohit Mohit", "https://unsplash.com/photos/QkTLv7K_Pe0", 1600, 1607),
     "old-city-bw": ("Jaipur's houses packed rooftop to rooftop, in black and white", "Jaipur, rooftop to rooftop",
                     "Jayanth Muppaneni", "https://unsplash.com/photos/WLmRiVr2E5A", 1600, 1354),
 }
-WIDTHS = {"city-above": (900, 1600, 2400)}
+WIDTHS = {"city-above": (900, 1600, 2400), "pink-bazaar": (900, 1600, 2400)}
 GRADE = {"Strong": 3, "Moderate": 2, "Weak": 1}
 PAGES = ["", "cafes/", "jewellery/", "next/", "about/", "updates/"]
 CURRENT = ' aria-current="page"'
@@ -194,9 +196,9 @@ class Site:
         return (f'<picture><source type="image/webp" srcset="{srcset("webp")}" sizes="{sizes}">'
                 f'<img src="{pre}img/{name}-1600.jpg" srcset="{srcset("jpg")}" sizes="{sizes}" width="{w}" height="{h}" alt="{E(alt)}" {load}></picture>')
 
-    def photo_tile(self, name, cls, pre, sizes="(max-width: 760px) 100vw, 40vw", caption=True):
+    def photo_tile(self, name, cls, pre, sizes="(max-width: 760px) 100vw, 40vw", caption=True, eager=False):
         cap = f'<figcaption>{E(PHOTOS[name][1])}</figcaption>' if caption else ""
-        return f'<figure class="t t-photo rv {cls}">{self.pic(name, sizes, pre)}{cap}</figure>'
+        return f'<figure class="t t-photo rv {cls}">{self.pic(name, sizes, pre, eager)}{cap}</figure>'
 
     def finding_tile(self, fid, cls, with_limit=True):
         x, P = self.F[fid], self.C["cafes"]
@@ -352,7 +354,7 @@ class Site:
         hero = f"""<section class="board story-head" aria-labelledby="hero-h">
   <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1><p class="statement">{self.f(V['text'])}</p>
     <p class="small src"><a href="{src['url']}" rel="noopener">{E(src['name'])}</a></p></div>
-  {self.photo_tile("old-city-bw", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw")}
+  {self.photo_tile("pink-bazaar", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw", eager=True)}
 </section>"""
 
         # ----- a short history: four dated tiles, read left to right -----
@@ -427,7 +429,7 @@ class Site:
         cafe = self.cafe
         head = f"""<section class="board p-head" aria-labelledby="h">
   <div class="t tone-pink s8 name rv"><h1 id="h">{E(P['headline'])}</h1></div>
-  {self.photo_tile("coffee", "s4 r2", pre, "(max-width: 760px) 100vw, 33vw")}
+  {self.photo_tile("coffee", "s4 r2", pre, "(max-width: 760px) 100vw, 33vw", eager=True)}
   <div class="t t-plain s5 rv"><p class="statement">{self.f(P['statement'])}</p><p class="small">{self.f(P['updated'])}</p></div>
   <div class="t t-accent s3 act rv"><a class="btn btn-paper" href="{cafe}/">{E(P['action'])}</a></div>
 </section>"""
@@ -453,7 +455,7 @@ class Site:
         pre, J = "../", self.C["jewellery"]
         head = f"""<section class="board p-head" aria-labelledby="h">
   <div class="t tone-clay s7 name rv"><h1 id="h">{E(J['headline'])}</h1></div>
-  {self.photo_tile("gem-cutter", "s5 r2", pre, "(max-width: 760px) 100vw, 42vw")}
+  {self.photo_tile("gem-cutter", "s5 r2", pre, "(max-width: 760px) 100vw, 42vw", eager=True)}
   <div class="t t-plain s4 rv"><p class="statement">{self.f(J['statement'])}</p></div>
   <div class="t t-accent s3 act rv"><a class="btn btn-paper" href="../updates/?pick=jewellery" data-pick="jewellery">{E(J['action'])}</a><p class="small">{self.f(J['note'])}</p></div>
 </section>"""
