@@ -1,0 +1,175 @@
+# The main site's words. Edit freely.
+#
+# Rules (enforced by pipeline/check.py, which fails the build):
+#   - No figures typed in here. Every number comes in as a {{token}}, read at build time from an industry site's
+#     published data: {{cafes.<token>}} is any token in the café index's data/insights.json.
+#     Extra tokens: {{cafes.findings}} (how many findings the café site has), {{cafes.updated}} (its snapshot date),
+#     {{brand}} (the brand name in site.config.yaml).
+#   - Name no business. Criticise no business, area or community.
+#   - Nothing for sale: no consulting offer, prices or "hire me".
+#   - **bold** marks a lead-in. Nothing else is formatted.
+
+meta:
+  title: "{{brand}} · Free data on Jaipur's industries, starting with cafés"
+  description: >-
+    Free, independent research for anyone who runs or plans to start a business in Jaipur. The Jaipur Café Index
+    is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month. Jewellery is next.
+  og_alt: "{{brand}}: Jaipur's industries, measured. The Hawa Mahal's pink facade."
+
+nav:
+  - ["#industries", "Industries"]
+  - ["#cafes", "Cafés"]
+  - ["#jewellery", "Jewellery"]
+  - ["#about", "About"]
+nav_action: ["#updates", "Get updates"]
+
+hero:
+  headline: "Jaipur's industries, measured."
+  sub: "Most business decisions here run on a hunch.|I measure the market instead."
+  from: "Live now: the Jaipur Café Index"
+  primary: "Explore the Café Index"
+  secondary: "Get free updates"
+  meta: "Cafés live · Jewellery next · updated {{cafes.updated}}"
+  how: "How I know"
+  pic_note: >-
+    Jaipur's founder built Jantar Mantar to measure the sky. This project measures the city's businesses,
+    one industry at a time.
+
+intro:
+  lead: >-
+    Ask a Jaipur business owner how they chose their price, their opening hours or their street, and you'll
+    usually hear a hunch, a cousin's advice and whatever the shop next door did. The data to do better is public.
+    It's scattered across apps, trade tables and government reports, and nobody has the time to read it. So I read
+    it, one industry at a time, and publish what it says, free.
+  cols:
+    - "**What customers reward.** Which choices, listings and habits line up with more custom, and which don't."
+    - "**Where the gaps are.** The hours, streets and offers your rivals have left open."
+    - "**What's changing.** Each industry is re-measured on a schedule, so you watch the market move instead of reading a report that went stale."
+    - "**Where it stops.** Every finding says what it doesn't prove and how far you can lean on it. A blank beats a guess."
+
+industries:
+  headline: "One city. One industry at a time."
+  lede: "For anyone running a business in these industries, whatever its size, and anyone planning to start one."
+  rows:
+    cafes:
+      tag: "Live"
+      text: >-
+        {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, re-measured twice a month: {{cafes.findings}} findings,
+        a playbook, a location check and a benchmark for your own café.
+      go: "Open"
+    jewellery:
+      tag: "Coming soon"
+      text: >-
+        Exports, the US tariff, the emerald trade, and what they mean for makers and shops at home.
+        The research is done and checked. The site is being built.
+      go: "Notify me"
+    candidates:
+      tag: "Up next?"
+      go: "Vote"
+
+cafes:
+  eyebrow: "Live now"
+  headline: "The Jaipur Café Index."
+  lede: >-
+    I read every café listing in C-Scheme and Malviya Nagar, {{cafes.scene.core_cafes}} cafés in all, so you
+    don't have to. Then I say, in plain words, what the data shows and what it doesn't: what customers reward,
+    where the gaps are, and what a rating really means.
+  inside:
+    - ["insights/", "Insights", "{{cafes.findings}} findings, each one sentence and one number, with what it means for your café."]
+    - ["playbook/", "Playbook", "The most common problems café owners here face, and a practical fix for each, with the maths shown."]
+    - ["location/", "Location check", "Pick any spot and read its five-minute walk: cafés, gaps, and who is around to buy coffee."]
+    - ["your-cafe/", "Your café", "Set your area, type and numbers, and see where you stand. It runs in your browser."]
+    - ["best/", "The best", "The cafés doing it best right now, and what each one did right."]
+  action: "Explore the Café Index"
+  note: "Updated {{cafes.updated}}. Re-measured every two weeks."
+
+proof:
+  headline: "Things I didn't know until I measured them."
+  lede: >-
+    A few of the {{cafes.findings}} café findings. Each one is graded for how far you can lean on it, and says
+    what it doesn't prove.
+  limit: "What it doesn't say:"
+  how: "How I know"
+  grades: {Strong: "Strong evidence", Moderate: "Moderate evidence", Weak: "Weak evidence"}
+  all: "Read all {{cafes.findings}} findings"
+
+band_caption: "Patrika Gate, Jaipur"
+
+jewellery:
+  eyebrow: "Coming soon"
+  headline: "Jewellery is next."
+  lede: >-
+    Jaipur cuts, sets and ships jewellery to the world. What's happening to that trade is in public data, but
+    it's buried in customs tables and trade reports. I've been digging through them. The research is done and
+    checked; the site is being built.
+  asks: "What it will answer:"
+  questions:
+    - "Who took India's silver-jewellery business in America while the tariff was on, and is it coming back?"
+    - "What's happening to the price of the emerald rough that Jaipur's cutters buy?"
+    - "Plain gold or studded, silver or coloured stones: which exports are growing, and which are shrinking?"
+    - "What do the wedding season, metal prices and visitors mean for shops at home?"
+  action: "Tell me when it's live"
+  note: "One message on WhatsApp when it launches. Nothing for sale."
+
+next:
+  headline: "Your industry could be next."
+  lede: >-
+    Two tests decide what comes after jewellery: is there public data to measure it, and do I know people who
+    run businesses in it? These are on the list. Vote for yours, or tell me what's missing.
+  action: "Vote for the next one"
+
+updates:
+  headline: "Get the findings as they land."
+  lede: >-
+    Free, on WhatsApp. Fresh café findings twice a month, one message when jewellery launches, and a say in what
+    comes next. Pick what you want.
+  name: "Your name"
+  contact: "Your WhatsApp number"
+  contact_hint: "Mobile number"
+  pick: "Send me"
+  picks:
+    cafes: "Cafés"
+    jewellery: "Jewellery, when it launches"
+    next: "The next industry"
+  question: "What do you wish you knew about your industry? (optional)"
+  question_hint: "A question, a hunch you'd like checked, or the industry you want next"
+  send: "Send me the updates"
+  note: >-
+    Used only to send these updates. Never shared, never sold. Reply "stop" any time and you're off the list.
+  thanks: "Thank you. You're on the list."
+  thanks_email: "Your email app should open with your details filled in. Press send and you're on the list."
+
+about:
+  headline: "Who's behind it."
+  paras:
+    - "I'm Sarthak Oberoi, a data analyst who grew up in Jaipur. I study how businesses win and lose in markets like this one."
+    - >-
+      In any market, someone is ahead because they know something the others don't. It rarely sits in the big,
+      obvious numbers. It hides in the part nobody thinks to check: the hour you open, how your listing reads on one
+      app, what a customer mentions in passing. My work is finding that edge and writing it down in plain words,
+      along with where it stops.
+    - >-
+      Cafés came first because I was sitting in them anyway, so I may as well count them. Jewellery is next because
+      it's the trade this city is known for around the world.
+    - >-
+      I run this on my own and keep it free. No platform or business pays to appear, nothing here is for sale, and
+      no business is ever criticised.
+
+contact:
+  headline: "Ask me anything the data could answer."
+  paras:
+    - >-
+      Running a business here, or planning one? Send me the question you'd most like answered about your industry or
+      your street. The best questions become the next findings.
+  email: "Email"
+  write: "Write an email"
+  copy: "Copy address"
+  linkedin: "LinkedIn"
+
+footer:
+  explore: "Explore"
+  learn: "This project"
+  stay: "Stay in touch"
+  note: >-
+    Independent research. Not affiliated with or endorsed by any platform or business named on the industry sites,
+    which appear only to cite where public figures came from. Code is open source under the MIT licence.
