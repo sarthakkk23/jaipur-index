@@ -156,13 +156,13 @@ html:not(.js) .story-hint { display: none; }
 
 /* the city, stage by stage: plots marked out; blocks rise; avenues become markets; today */
 .plan .bld, .plan .square { transform-box: fill-box; transform-origin: center; }
-.plan .bld { transform: scale(0); transition: transform .6s var(--ease); transition-delay: calc(var(--i) * 14ms); }
+.plan .bld { transform: scale(.4); opacity: 0; transition: transform .6s var(--ease), opacity .4s ease; transition-delay: calc(var(--i) * 14ms); }
 .plan .avenue, .plan .stall { opacity: 0; transition: opacity .5s ease; }
 .plan .stall { transition-delay: calc(var(--i) * 6ms); }
-.plan .square { transform: scale(0); transition: transform .6s var(--ease) .25s; }
-:is([data-stage="1"], [data-stage="2"], [data-stage="3"]) .plan .bld { transform: none; }
+.plan .square { transform: scale(.4); opacity: 0; transition: transform .6s var(--ease) .25s, opacity .4s ease .25s; }
+:is([data-stage="1"], [data-stage="2"], [data-stage="3"]) .plan .bld { transform: none; opacity: 1; }
 :is([data-stage="2"], [data-stage="3"]) .plan :is(.avenue, .stall) { opacity: 1; }
-:is([data-stage="2"], [data-stage="3"]) .plan .square { transform: none; }
+:is([data-stage="2"], [data-stage="3"]) .plan .square { transform: none; opacity: 1; }
 [data-stage="3"] .today { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .plan *, .today, .story-on .step, .story-side { transition: none !important; } }
 
