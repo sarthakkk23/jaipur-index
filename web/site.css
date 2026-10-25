@@ -73,7 +73,7 @@ b { font-weight: 600; }
 .bar-links a { text-decoration: none; color: var(--soft); padding: 8px 0; transition: color .2s ease; }
 .bar-links a:hover, .bar-links a[aria-current] { color: var(--ink); }
 .bar-links a[aria-current] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .45em; }
-.bar-btn { min-height: 44px; }
+.bar-btn { min-height: 44px; white-space: nowrap; flex: none; }
 .menu { display: none; margin-left: auto; }
 .menu summary { list-style: none; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; background: var(--stone); font-weight: 600; font-size: .9375rem; }
 .menu summary::-webkit-details-marker { display: none; }
