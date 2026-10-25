@@ -15,25 +15,31 @@ In the wider project folder, read `../GAMEPLAN.md` first.
 - **Nothing is for sale.** It has no consulting offer, prices or "hire me". The gate fails the build on wording that
   reads like an offer.
 - **It doesn't publish research itself.** The industry sites do, and this site sends people to them.
-- **It looks like the café site.** The fonts, colours, layout and motion layer are copied from `cafes/web/v2/`.
+- **It shares the café site's sense, not its layouts.** The fonts (Literata), colours (the Pink City palette), flat colour
+  with no lines or shadows, and calm motion are the same. The layout is its own: Jaipur's walled city is a grid of blocks
+  with a bazaar for each trade, so every page here is a board of flat tiles fitted edge to edge, each tile one thing.
 
 ## How it fits together
 
 ```
 site.config.yaml        brand, domain, industry addresses, sign-up form, which café findings to show. ONE FILE.
-content/copy.yaml       every word on the page; numbers only as {{tokens}}
+content/copy.yaml       every word on every page; numbers only as {{tokens}}
 pipeline/build.py       config + copy + each live industry's published data + web/ -> dist/ (static, no framework)
-pipeline/check.py       the gate, written separately: every number on the built page must trace to published data
+pipeline/check.py       the gate, written separately: every number on every built page must trace to published data
 pipeline/make_images.swift   draws og.jpg (share card) and the icons; run on a Mac when the look changes
-web/v2.css, web/v2.js   shared with the café index (keep in step); master.css / master.js add the front door's parts
+web/site.css, site.js   the board: tiles, the photo sheet, "Find your trade", the form, the motion
+web/img/                photographs from Unsplash (credited on each page and on About), and Sarthak's portrait
 .github/workflows/site.yml   PRs: build + gate. main and site/** branches: + deploy. Twice a week: rebuild
 ```
 
+**Pages:** `/` (the front door, with "Find your trade"), `/cafes/`, `/jewellery/` (coming soon), `/next/` (the
+candidates and the vote), `/about/` (who, how it's made, photo credits), `/updates/` (sign-up and questions), and a 404.
+
 **Where the numbers come from.** None are typed in. At build time `build.py` reads the café index's own published
-file (`<café site>/data/insights.json`) and fills the `{{tokens}}` in the copy from it. The hero's rotating finding and
-the proof cards are the café index's published findings, picked by id in `site.config.yaml`. The site rebuilds twice
-a week, so the front door follows each café refresh without anyone editing it. `check.py` then reads the finished page
-and fails if any visible number isn't in that data.
+file (`<café site>/data/insights.json`) and fills the `{{tokens}}` in the copy from it. The findings shown (in the picker, the home
+page's figures and the Cafés page) are the café index's published findings, picked by id in `site.config.yaml`. The site
+rebuilds twice a week, so the front door follows each café refresh without anyone editing it. `check.py` then reads every
+finished page and fails if any visible number isn't in that data.
 
 ## Build locally
 
@@ -80,4 +86,5 @@ Until this is done, the form still works: "Send" opens the visitor's email app w
 
 ## Licence
 
-Code: MIT (see LICENSE). Photographs are from Unsplash, credited in the footer.
+Code: MIT (see LICENSE). Photographs are from Unsplash under the Unsplash licence, credited in each page's footer
+and on the About page. None shows a business measured on the industry sites.

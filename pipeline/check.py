@@ -2,7 +2,7 @@
 if anything a visitor can read breaks the house rules.
 
   1. No figure typed into content/copy.yaml: every number there must come in as a {{token}}.
-  2. Every number visible on the built page (text, title, description, share text) is found in an industry site's
+  2. Every number visible on every built page (text, title, description, share text) is found in an industry site's
      published data: a token value, a finding's value, or the wording of a published finding. Dates of the
      snapshot and of the build are allowed.
   3. Nothing for sale: no prices, fees, packages or "hire me".
@@ -100,26 +100,29 @@ def main():
     overrides.update(dict(x.split("=", 1) for x in a.data))
     data = load_data(cfg, overrides)
     ok = allowed_numbers(data)
-    built = (ROOT / "dist" / "index.html").read_text(encoding="utf-8")
-    m = re.search(r"built (\d{1,2}) \w+ (\d{4})", built)
-    if m:
-        ok.update(m.groups())
-    p = Visible()
-    p.feed(built)
-    text = html.unescape(" ".join(p.out))
-    for n in sorted({norm(x) for x in NUM.findall(text)}):
-        if n not in ok:
-            ctx = re.search(rf".{{0,50}}\b{re.escape(n)}\b.{{0,30}}", text.replace(",", ""))
-            errors.append(f"index.html shows {n}, which isn't in the published data: …{ctx.group(0).strip() if ctx else ''}…")
-
-    # 3. nothing for sale
-    for hit in SELLING.findall(text):
-        errors.append(f"index.html reads like an offer: '{hit}'")
+    pages = 0
+    for page in sorted((ROOT / "dist").rglob("*.html")):
+        rel = page.relative_to(ROOT / "dist")
+        built = page.read_text(encoding="utf-8")
+        allowed = set(ok)
+        m = re.search(r"built (\d{1,2}) \w+ (\d{4})", built)
+        if m:
+            allowed.update(m.groups())
+        p = Visible()
+        p.feed(built)
+        text = html.unescape(" ".join(p.out))
+        for n in sorted({norm(x) for x in NUM.findall(text)}):
+            if n not in allowed:
+                ctx = re.search(rf".{{0,50}}\b{re.escape(n)}\b.{{0,30}}", text.replace(",", ""))
+                errors.append(f"{rel} shows {n}, which isn't in the published data: …{ctx.group(0).strip() if ctx else ''}…")
+        for hit in SELLING.findall(text):
+            errors.append(f"{rel} reads like an offer: '{hit}'")
+        pages += 1
 
     if errors:
         print("check failed:", *errors, sep="\n  ", file=sys.stderr)
         sys.exit(1)
-    print(f"check passed: every number on the page traces to published data ({len(ok)} allowed values)")
+    print(f"check passed: every number on {pages} pages traces to published data ({len(ok)} allowed values)")
 
 
 if __name__ == "__main__":

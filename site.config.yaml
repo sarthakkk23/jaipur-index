@@ -62,8 +62,11 @@ subscribe:
     industries: ""    # Checkboxes: "Cafés" / "Jewellery, when it launches" / "The next industry" (must match exactly)
     question: ""      # Paragraph: "What do you wish you knew about your industry?" (optional)
 
-# The café findings the page shows, by their id in the café index's published data. The hero rotates through
-# `hero_rotation` (first one shows first); the proof section shows `proof`, in this order.
+# The café findings the site shows, by their id in the café index's published data.
+#   picker: the three shown when someone picks "Cafés" in "Find your trade" (home page)
+#   stats:  the three figure tiles on the home page, tallest first
+#   proof:  the six on the Cafés page, in this order
 findings:
-  hero_rotation: [cluster, attention, survey_word_of_mouth, delivery, cs_price_premium, ratings, visibility, survey_on_the_fence]
+  picker: [cluster, survey_word_of_mouth, delivery]
+  stats: [cluster, attention, survey_word_of_mouth]
   proof: [cluster, attention, survey_word_of_mouth, delivery, cs_price_premium, ratings]

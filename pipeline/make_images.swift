@@ -67,14 +67,14 @@ func save(_ c: CGContext, _ name: String, jpeg: Bool = false) {
     print("wrote web/\(name)")
 }
 
-// ---------- og.jpg: the Hawa Mahal on the left, the promise on blush ----------
+// ---------- og.jpg: Jaipur from above on the left, the promise on blush ----------
 let og = canvas(1200, 630)
 og.setFillColor(blush); og.fill(CGRect(x: 0, y: 0, width: 1200, height: 630))
-if let src = NSImage(contentsOf: web.appendingPathComponent("img/hawa-mahal-sky-1600.jpg")), let img = src.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+if let src = NSImage(contentsOf: web.appendingPathComponent("img/city-above-1600.jpg")), let img = src.cgImage(forProposedRect: nil, context: nil, hints: nil) {
     let w = 560.0, h = 630.0, iw = Double(img.width), ih = Double(img.height)
-    let scale = max(w / iw, h / ih) * 1.7          // zoom in on the facade
+    let scale = max(w / iw, h / ih) * 1.15         // a little closer to the rooftops
     let cw = w / scale, ch = h / scale
-    let crop = CGRect(x: (iw - cw) / 2, y: (ih - ch) * 0.92, width: cw, height: ch)   // the facade, not the sky
+    let crop = CGRect(x: (iw - cw) / 2, y: (ih - ch) * 0.75, width: cw, height: ch)   // rooftops, not sky
     og.draw(img.cropping(to: crop)!, in: CGRect(x: 0, y: 0, width: w, height: h))
 }
 mark(og, x: 616, y: 630 - 64 - 56, size: 56)
