@@ -387,8 +387,7 @@ class Site:
         # ----- the bridge: from the city's trades to this project -----
         I = H["bridge"]
         bridge = f"""<section class="board intro" aria-labelledby="bridge-h">
-  <div class="t t-plain s12 rv"><h2 id="bridge-h">{E(I['headline'])}</h2><p class="lead">{self.f(I['lead'])}</p>
-  <div class="cols">{''.join(f'<p>{self.f(c)}</p>' for c in I['cols'])}</div></div>
+  <div class="t t-plain s12 rv"><h2 id="bridge-h">{E(I['headline'])}</h2><p class="lead">{self.f(I['lead'])}</p></div>
 </section>"""
 
         # ----- find your trade: the one live thing; one photograph, the one that belongs to the answer -----
@@ -457,12 +456,45 @@ class Site:
   <div class="t t-plain s7 words rv"><h2 id="inside-h" class="giant">{E(P['inside_word'])}</h2>{bars}</div>
   {self.photo_tile("badi-chaupar", "s5 sticky", pre)}
 </section>"""
-        spans = ["s6 tone-blush", "s3 tone-stone", "s3 tone-pink", "s3 tone-stone", "s3 tone-blush", "s6 tone-clay"]
-        figs = "".join(self.finding_tile(fid, spans[n % 6]) for n, fid in enumerate(self.cfg["findings"]["proof"]))
+        # ----- guess first: one finding at a time, the reader guesses, then sees the real figure -----
+        G = P["guess"]
+        ids = self.cfg["findings"]["proof"]
+
+        def question(x):
+            """The finding's own published sentence, turned into a question; no words or numbers added."""
+            h = x["headline"].rstrip(".")
+            lead = G["more"] if h.startswith("more") else G["share"]
+            return f"{lead} {h}?"
+
+        cards = []
+        for n, fid in enumerate(ids):
+            x = self.F[fid]
+            g = GRADE.get(x.get("grade"), 0)
+            cards.append(f"""<article class="gq" data-value="{E(num(x['value']))}" data-unit="{E(x.get('unit', ''))}">
+      <div class="gq-ask tone-blush"><p class="gq-q">{E(question(x))}</p>
+        <div class="gq-controls"><label class="gq-label" for="gq-{n}">{E(G['yours'])}: <output class="n" for="gq-{n}"></output></label>
+          <input type="range" id="gq-{n}" min="0" max="100" step="1" value="50" aria-describedby="gq-h">
+          <button type="button" class="btn gq-lock">{E(G['lock'])}</button></div></div>
+      <div class="gq-reveal tone-clay">
+        <div class="gq-bars" aria-hidden="true"><p><span>{E(G['yours'])}</span><i class="gq-you"></i></p><p><span>{E(G['real'])}</span><i class="gq-real"></i></p></div>
+        <p class="gq-verdict" role="status" aria-live="polite"></p>
+        <p class="fig"><span class="n">{E(num(x['value']))}</span><small>{E(x.get('unit', ''))}</small></p>
+        <p class="fig-cap">{E(x['headline'])}</p>
+        <p class="fd-limit"><b>{E(P['limit'])}</b> {E(x.get('limit', ''))}</p>
+        <p class="fd-grade"><span class="ev" data-g="{g}"><i></i><i></i><i></i></span>{E(P['grades'].get(x.get('grade'), ''))} · <a href="{cafe}/insights/#f-{fid}">{E(P['how'])}</a></p>
+      </div></article>""")
+        marks = "".join('<i></i>' for _ in ids)
+        strings = {k: G[k] for k in ("next", "finish", "again", "spot", "near", "far", "under", "over", "gap", "done", "done_more")}
         proof = f"""<section class="board proof" aria-labelledby="proof-h">
-  <div class="t t-plain s12 sec-head rv"><h2 id="proof-h">{E(P['findings_headline'])}</h2><p>{self.f(P['findings_lede'])}</p></div>
-  {figs}
-  <div class="t t-plain s12 rv"><a class="btn" href="{cafe}/insights/"><span>{self.f(P['all'])}</span></a></div>
+  <div class="t t-plain s12 guess rv" data-total="{len(ids)}" data-all="{E(self.T['cafes.findings'])}" data-s='{E(json.dumps(strings, ensure_ascii=False))}'>
+    <div class="sec-head"><h2 id="proof-h">{E(G['headline'])}</h2><p id="gq-h">{self.f(G['lede'])}</p></div>
+    <div class="gq-marks" aria-hidden="true" hidden>{marks}</div>
+    <div class="gq-list">{''.join(cards)}</div>
+    <div class="gq-end tone-ink" hidden><p class="gq-score"></p><p class="gq-more"></p>
+      <p class="gq-acts"><a class="btn btn-paper" href="{cafe}/insights/"><span>{self.f(P['all'])}</span></a><button type="button" class="btn btn-quiet gq-again">{E(G['again'])}</button></p></div>
+    <p class="gq-nav" hidden><button type="button" class="btn btn-accent gq-next">{E(G['next'])}</button></p>
+  </div>
+  <div class="t t-plain s12 gq-all rv"><a class="btn" href="{cafe}/insights/"><span>{self.f(P['all'])}</span></a></div>
 </section>"""
         close = self.close_row(pre, P["close_headline"], P["close_text"], "../updates/?pick=cafes", P["close_action"], "workshop")
         return self.page("cafes/", self.p(P["title"]), self.p(P["description"]), "\n".join([head, inside, proof, close]),

@@ -50,13 +50,7 @@ home:
     headline: "Three centuries on, the traders are still here."
     lead: >-
       What most of them don't have is the numbers: what customers reward, where the gaps are, what's changing on
-      their street. Big platforms see that kind of data every day. The family shop on the corner usually doesn't.
-      This project is for the shop.
-    cols:
-      - "**Who it's for.** Anyone running a business in Jaipur, whatever its size, and anyone planning to start one. A single café counts as much as a chain."
-      - "**What's live.** The Jaipur Café Index: {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, re-measured every two weeks, with {{cafes.findings}} findings in plain words."
-      - "**What's next.** Jewellery, the trade this city is known for around the world. The research is done and checked, and the site is being built. After that, you help choose."
-      - "**How it's made.** Public listings and trade data, the same method every time, aggregates only. Every finding is graded and says what it doesn't prove. Free, and nothing for sale."
+      their street. That's what this is for.
   picker:
     headline: "Find your trade."
     lede: "Pick yours and see what's here for you today."
@@ -119,6 +113,25 @@ cafes:
     - ["best/", "The best", "The cafés doing it best right now, and what each one did right."]
     - ["method/", "Method", "The statistics in plain words, what counts as a café, and the data to download."]
   open: "Open"
+  guess:
+    headline: "Guess first."
+    lede: "Six findings from the Café Index. Make your guess, then see the real figure."
+    share: "What share"
+    more: "How much"
+    yours: "Your guess"
+    real: "The real figure"
+    lock: "Lock in my guess"
+    next: "Next finding"
+    finish: "See how you did"
+    again: "Play again"
+    spot: "Spot on."
+    near: "Close."
+    far: "Not quite."
+    under: "under"
+    over: "over"
+    gap: "You were {d} points {dir}."
+    done: "You were within ten points on {n} of {total}."
+    done_more: "There are {all} findings like these on the Café Index, each with what it means for your café."
   findings_headline: "Things I didn't know."
   findings_lede: >-
     Six of the {{cafes.findings}} findings, each graded for how far you can lean on it.
