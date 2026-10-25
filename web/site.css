@@ -124,41 +124,74 @@ main > :last-child { padding-bottom: var(--gap); }
 .story-pic img { object-position: 50% 40%; }
 @media (max-width: 900px) { .story-head .t { min-height: 0; } .story-pic { min-height: 70vw; } }
 
-/* ---------- home: the story, one moment at a time ---------- */
+/* ---------- home: the story, one moment at a time, beside a city that builds itself ---------- */
 .story-box { display: grid; gap: 20px; padding-top: clamp(32px, 4vw, 56px); }
 .story-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
 .story-hint { color: var(--soft); }
 html:not(.js) .story-hint { display: none; }
-.steps { display: grid; gap: var(--gap); }
-.step { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px 40px; align-items: end; min-height: 340px; padding: clamp(24px, 3vw, 48px); }
-.step-mark { font-size: clamp(3.5rem, 1.6rem + 7vw, 9rem); line-height: .82; letter-spacing: -0.055em; font-weight: 500; }
+.story-body { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: var(--gap); }
+.stage { position: relative; overflow: hidden; background: var(--stone); aspect-ratio: 1; }
+.plan { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.today { position: absolute; inset: 0; opacity: 0; transform: scale(1.06); transition: opacity 1s ease, transform 1.4s var(--ease); }
+.today img { object-position: 45% 50%; }
+.today-cap { position: absolute; left: 0; bottom: 0; padding: 4px 10px; background: var(--paper); color: var(--ink); font-size: 1rem; }
+.story-side { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: clamp(24px, 3vw, 44px);
+  background: var(--blush); transition: background-color .6s ease, color .6s ease; }
+.steps { display: grid; gap: 40px; }
+.step { display: grid; gap: 18px; align-content: start; }
+.step-mark { font-size: clamp(3.5rem, 1.6rem + 6vw, 8rem); line-height: .82; letter-spacing: -0.055em; font-weight: 500; }
 .step-text { display: grid; gap: 12px; }
 .step-text h3 { font-size: var(--t2); }
-.step-text p { font-size: var(--t3); line-height: 1.3; max-width: 34ch; }
-.story-on .steps { grid-template-areas: "s"; }
-.story-on .step { grid-area: s; }
+.step-text p { font-size: var(--t3); line-height: 1.3; max-width: 32ch; }
+.story-on .steps { grid-template-areas: "s"; gap: 0; }
+.story-on .step { grid-area: s; transition: opacity .45s ease, transform .55s var(--ease); }
 .story-on .step[hidden] { display: grid; visibility: hidden; opacity: 0; }       /* hidden steps keep their space, so the page never jumps */
-.story-on .step { transition: opacity .45s ease, transform .55s var(--ease); }
 .story-on .step.from-right { opacity: 0; transform: translateX(28px); transition: none; }
 .story-on .step.from-left { opacity: 0; transform: translateX(-28px); transition: none; }
-.story-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+
+/* the tile behind the words takes each moment's colour */
+[data-stage="1"] .story-side { background: var(--stone-2); }
+[data-stage="2"] .story-side { background: var(--pink); }
+[data-stage="3"] .story-side { background: var(--ink); color: var(--paper); }
+
+/* the city, stage by stage: plots marked out; blocks rise; avenues become markets; today */
+.plan .bld, .plan .square { transform-box: fill-box; transform-origin: center; }
+.plan .bld { transform: scale(0); transition: transform .6s var(--ease); transition-delay: calc(var(--i) * 14ms); }
+.plan .avenue, .plan .stall { opacity: 0; transition: opacity .5s ease; }
+.plan .stall { transition-delay: calc(var(--i) * 6ms); }
+.plan .square { transform: scale(0); transition: transform .6s var(--ease) .25s; }
+:is([data-stage="1"], [data-stage="2"], [data-stage="3"]) .plan .bld { transform: none; }
+:is([data-stage="2"], [data-stage="3"]) .plan :is(.avenue, .stall) { opacity: 1; }
+:is([data-stage="2"], [data-stage="3"]) .plan .square { transform: none; }
+[data-stage="3"] .today { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .plan *, .today, .story-on .step, .story-side { transition: none !important; } }
+
+/* turning the page: four marks that fill as you go, and Back / Next */
+.story-nav { display: grid; gap: 16px; }
 .story-nav[hidden] { display: none; }
-.dots { display: flex; flex-wrap: wrap; gap: 6px; }
-.dot-btn { min-height: 44px; padding: 0 16px; border: 0; border-radius: 0; background: var(--stone-2); color: var(--ink); font: 600 1rem/1 "Literata", Georgia, serif; cursor: pointer;
-  transition: background-color .2s ease, color .2s ease; }
-.dot-btn.seen { background: var(--pink); }
-.dot-btn[aria-current="step"] { background: var(--ink); color: var(--paper); }
-@media (hover: hover) and (pointer: fine) { .dot-btn:not([aria-current="step"]):hover { background: var(--blush); } }
+.dots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dot-btn { display: grid; gap: 8px; justify-items: start; min-height: 44px; padding: 6px 0 0; border: 0; border-radius: 0; background: none; color: inherit;
+  font: 600 1rem/1 "Literata", Georgia, serif; cursor: pointer; text-align: left; }
+.dot-btn i { display: block; width: 100%; height: 8px; background: currentColor; opacity: .18; transition: opacity .3s ease, background-color .3s ease; }
+.dot-btn.seen i { opacity: .55; }
+.dot-btn[aria-current="step"] i { opacity: 1; background: var(--red); }
+[data-stage="3"] .dot-btn[aria-current="step"] i { background: var(--pink); }
+@media (hover: hover) and (pointer: fine) { .dot-btn:hover i { opacity: .7; } }
 .story-btns { display: flex; gap: 8px; }
 .story-btns .btn[disabled] { opacity: .4; cursor: default; }
-@media (max-width: 760px) {
-  .step { grid-template-columns: 1fr; align-items: start; align-content: space-between; min-height: 380px; }
-  .story-nav { flex-direction: column; align-items: stretch; }
+.story-next { background: var(--ink); color: var(--paper); }
+[data-stage="3"] .story-next { background: var(--paper); color: var(--ink); }
+@media (max-width: 900px) {
+  .story-body { grid-template-columns: 1fr; }
   .story-btns .btn { flex: 1; }
-  .dots { flex-wrap: nowrap; }
-  .dot-btn { flex: 1; padding: 0 6px; }
 }
-@media (prefers-reduced-motion: reduce) { .story-on .step { transition: none; } }
+@media (max-width: 600px) {            /* phones: the picture and the Next button fit on one screen */
+  .stage { aspect-ratio: 4 / 3; }
+  .step-mark { font-size: 3rem; }
+  .story-side { gap: 20px; padding: 20px; }
+  .step { gap: 10px; }
+  .step-text p { font-size: 1.0625rem; }
+}
 
 /* ---------- home: the problem, over four columns ---------- */
 .intro .t { padding-top: clamp(40px, 6vw, 88px); padding-bottom: clamp(40px, 6vw, 88px); }

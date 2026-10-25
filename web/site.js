@@ -28,6 +28,7 @@
   if (box) {
     const steps = [...box.querySelectorAll(".step")], dots = [...box.querySelectorAll(".dot-btn")];
     const next = box.querySelector(".story-next"), back = box.querySelector(".story-back"), nav = box.querySelector(".story-nav");
+    const today = box.querySelector(".today img");
     let at = 0;
     const show = (i, dir) => {
       at = (i + steps.length) % steps.length;
@@ -37,6 +38,8 @@
         if (on && dir && !reduce) { s.classList.add(dir > 0 ? "from-right" : "from-left"); void s.offsetWidth; s.classList.remove("from-right", "from-left"); }
       });
       dots.forEach((d, n) => { d.classList.toggle("seen", n < at); n === at ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current"); });
+      box.dataset.stage = String(at);              // the city builds to this moment
+      if (at >= 1) today?.setAttribute("loading", "eager");   // fetch today's photograph before the last page
       back.disabled = at === 0;
       next.textContent = at === steps.length - 1 ? next.dataset.again : next.dataset.next;
     };
@@ -51,8 +54,9 @@
     });
     // a swipe on a phone turns the page too
     let x0 = null;
-    box.querySelector(".steps").addEventListener("pointerdown", (e) => { x0 = e.clientX; });
-    box.querySelector(".steps").addEventListener("pointerup", (e) => {
+    const swipe = box.querySelector(".story-body");
+    swipe.addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+    swipe.addEventListener("pointerup", (e) => {
       if (x0 === null) return;
       const dx = e.clientX - x0; x0 = null;
       if (Math.abs(dx) > 50) dx < 0 ? show(Math.min(at + 1, steps.length - 1), 1) : show(Math.max(at - 1, 0), -1);

@@ -16,6 +16,8 @@ from urllib.parse import quote
 
 import yaml
 
+import plan
+
 ROOT = Path(__file__).resolve().parent.parent
 WEB, DIST, CACHE = ROOT / "web", ROOT / "dist", ROOT / ".cache"
 E = html.escape
@@ -357,19 +359,27 @@ class Site:
 
         # ----- the story: one moment at a time, turned by the reader (all four are in the page without script) -----
         S = H["history"]
-        tones = ["tone-blush", "tone-stone2", "tone-pink", "tone-ink"]
-        steps = "".join(f"""<article class="step {tones[n % 4]}" id="step-{n + 1}" data-step="{n}" aria-label="{n + 1} of {len(S['items'])}">
+        steps = "".join(f"""<article class="step" id="step-{n + 1}" data-step="{n}" aria-label="{n + 1} of {len(S['items'])}">
       <p class="step-mark">{self.f(mark)}</p><div class="step-text"><h3>{E(title)}</h3><p>{self.f(text)}</p></div></article>"""
                         for n, (mark, title, text) in enumerate(S["items"]))
-        dots = "".join(f'<button type="button" class="dot-btn" data-go="{n}" aria-label="{E(self.p(mark))}: {E(title)}">{self.f(mark)}</button>'
+        dots = "".join(f'<button type="button" class="dot-btn" data-go="{n}" aria-label="{E(self.p(mark))}: {E(title)}"><i></i><span>{self.f(mark)}</span></button>'
                        for n, (mark, title, _) in enumerate(S["items"]))
+        self.used.append("badi-chaupar")             # today: a bazaar street at Badi Chaupar, one of the squares in the story
+        today = (f'<picture class="today"><source type="image/webp" srcset="img/badi-chaupar-900.webp 900w, img/badi-chaupar-1600.webp 1600w" sizes="(max-width: 900px) 100vw, 45vw">'
+                 f'<img src="img/badi-chaupar-1600.jpg" srcset="img/badi-chaupar-900.jpg 900w, img/badi-chaupar-1600.jpg 1600w" sizes="(max-width: 900px) 100vw, 45vw" '
+                 f'width="1200" height="800" alt="{E(PHOTOS["badi-chaupar"][0])}" loading="lazy" decoding="async"><span class="today-cap">{E(PHOTOS["badi-chaupar"][1])}, today</span></picture>')
         history = f"""<section class="board history" id="story" aria-labelledby="hist-h">
-  <div class="t t-plain s12 story-box rv">
+  <div class="t t-plain s12 story-box rv" data-stage="2">
     <div class="story-top"><h2 id="hist-h">{E(S['headline'])}</h2><p class="story-hint">{E(S['hint'])}</p></div>
-    <div class="steps" aria-live="polite">{steps}</div>
-    <div class="story-nav" hidden><div class="dots" role="group" aria-label="Moments">{dots}</div>
-      <p class="story-btns"><button type="button" class="btn btn-quiet story-back">{E(S['back'])}</button>
-      <button type="button" class="btn btn-accent story-next" data-next="{E(S['next'])}" data-again="{E(S['again'])}">{E(S['next'])}</button></p></div>
+    <div class="story-body">
+      <figure class="stage">{plan.plan_svg()}{today}</figure>
+      <div class="story-side">
+        <div class="steps" aria-live="polite">{steps}</div>
+        <div class="story-nav" hidden><div class="dots" role="group" aria-label="Moments">{dots}</div>
+          <p class="story-btns"><button type="button" class="btn btn-quiet story-back">{E(S['back'])}</button>
+          <button type="button" class="btn btn-paper story-next" data-next="{E(S['next'])}" data-again="{E(S['again'])}">{E(S['next'])}</button></p></div>
+      </div>
+    </div>
     <p class="small"><a href="{src['url']}" rel="noopener">{E(S['source'])}</a></p>
   </div>
 </section>"""
