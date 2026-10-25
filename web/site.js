@@ -3,10 +3,9 @@
   window.__board = true;
   const root = document.documentElement;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
   // ---------- entrances: tiles rise in, a board at a time, staggered by position; never a gate ----------
-  const tiles = [...document.querySelectorAll(".rv, .sh, .cell, .mosaic")];
+  const tiles = [...document.querySelectorAll(".rv")];
   const showAll = () => tiles.forEach((t) => t.classList.add("in"));
   if (!reduce && "IntersectionObserver" in window) {
     let alive = false;
@@ -17,27 +16,12 @@
         if (!e.isIntersecting) return;
         const t = e.target, sib = [...(t.parentElement?.children || [])];
         t.style.transitionDelay = `${Math.min(6, Math.max(0, sib.indexOf(t))) * 75}ms`;
-        if (t.classList.contains("mosaic")) [...t.children].forEach((c, i) => { c.style.transitionDelay = `${(i % 6) * 60 + Math.floor(i / 6) * 90}ms`; });
         t.classList.add("in");
         io.unobserve(t);
       });
     }, { rootMargin: "0px 0px -6% 0px" });
     tiles.forEach((t) => io.observe(t));
   } else showAll();
-
-  // ---------- the hero sheet: columns drift at their own speeds as the page scrolls ----------
-  const cols = [...document.querySelectorAll(".sheet-col[data-speed]")];
-  if (cols.length && !reduce) {
-    const wide = matchMedia("(min-width: 761px)");
-    let ticking = false;
-    const frame = () => {
-      ticking = false;
-      const y = clamp(scrollY, 0, innerHeight * 1.2);
-      cols.forEach((c) => { c.style.transform = wide.matches ? `translateY(${(-y * +c.dataset.speed).toFixed(1)}px)` : ""; });
-    };
-    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
-    wide.addEventListener?.("change", frame);
-  }
 
   // ---------- find your trade: pick one, the board answers in place ----------
   const answer = document.getElementById("answer");

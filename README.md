@@ -24,6 +24,7 @@ In the wider project folder, read `../GAMEPLAN.md` first.
 ```
 site.config.yaml        brand, domain, industry addresses, sign-up form, which café findings to show. ONE FILE.
 content/copy.yaml       every word on every page; numbers only as {{tokens}}
+content/history.yaml    Jaipur's own dates, each quoted from a public source (UNESCO); the only numbers not from an index
 pipeline/build.py       config + copy + each live industry's published data + web/ -> dist/ (static, no framework)
 pipeline/check.py       the gate, written separately: every number on every built page must trace to published data
 pipeline/make_images.swift   draws og.jpg (share card) and the icons; run on a Mac when the look changes
@@ -32,14 +33,15 @@ web/img/                photographs from Unsplash (credited on each page and on 
 .github/workflows/site.yml   PRs: build + gate. main and site/** branches: + deploy. Twice a week: rebuild
 ```
 
-**Pages:** `/` (the front door, with "Find your trade"), `/cafes/`, `/jewellery/` (coming soon), `/next/` (the
+**Pages:** `/` (the front door: an honest skip-to-it note, a short history of Jaipur, then "Find your trade"), `/cafes/`, `/jewellery/` (coming soon), `/next/` (the
 candidates and the vote), `/about/` (who, how it's made, photo credits), `/updates/` (sign-up and questions), and a 404.
 
 **Where the numbers come from.** None are typed in. At build time `build.py` reads the café index's own published
 file (`<café site>/data/insights.json`) and fills the `{{tokens}}` in the copy from it. The findings shown (in the picker, the home
 page's figures and the Cafés page) are the café index's published findings, picked by id in `site.config.yaml`. The site
 rebuilds twice a week, so the front door follows each café refresh without anyone editing it. `check.py` then reads every
-finished page and fails if any visible number isn't in that data.
+finished page and fails if any visible number isn't in that data. The one exception is Jaipur's history: its dates live in
+`content/history.yaml`, each with its source and the quoted sentence, and the gate fails if a date isn't in its own quote.
 
 ## Build locally
 

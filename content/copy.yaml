@@ -4,7 +4,8 @@
 #   - No figures typed in here. Every number comes in as a {{token}}, read at build time from an industry site's
 #     published data: {{cafes.<token>}} is any token in the café index's data/insights.json.
 #     Extra tokens: {{cafes.findings}} (how many findings the café site has), {{cafes.updated}} (its snapshot date),
-#     {{brand}} (the brand name in site.config.yaml).
+#     {{brand}} (the brand name in site.config.yaml), and {{history.<key>}}: Jaipur's own dates, each quoted from a
+#     public source in content/history.yaml.
 #   - Name no business. Criticise no business, area or community.
 #   - Nothing for sale: no consulting offer, prices or "hire me".
 #   - **bold** marks a run-in at the start of a paragraph. Nothing else is formatted.
@@ -21,23 +22,41 @@ nav_action: ["updates/", "Get updates"]
 home:
   title: "{{brand}} · Free data on Jaipur's industries, starting with cafés"
   description: >-
-    Free, independent research for anyone who runs or plans to start a business in Jaipur. The Jaipur Café Index
-    is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month. Jewellery is next.
+    Jaipur was built to trade. Free, independent data for anyone who runs or plans to start a business here: the
+    Jaipur Café Index is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month. Jewellery is next.
+  hurry:
+    text: "I'll be straight with you: this page is the long way round. If you already know what you're after, skip to it."
+    links:
+      - ["cafe", "Café data: the Café Index"]
+      - ["jewellery/", "Jewellery: tell me when it's live"]
+      - ["updates/", "Free updates on WhatsApp"]
+      - ["updates/#ask", "Ask me a question"]
+    after: "Otherwise, start with the city. It's a good story, and it's short."
   hero:
-    headline: "Jaipur's industries, measured."
-    sentence: >-
-      Free, independent data for anyone who runs a business here or plans to start one.
-      Cafés are live. Jewellery is next.
-    action: "Explore the Café Index"
-  intro:
+    headline: "Jaipur was built to trade."
+    text: >-
+      In {{history.founded}}, Sawai Jai Singh II laid out a new city on the plain below the Amber hills. Its main
+      avenues were designed as markets, and he invited traders to come and settle. Those avenues are still the
+      city's bazaars.
+  history:
+    headline: "A short history."
+    source: "Every date here is from UNESCO's World Heritage listing of Jaipur City."
+    items:
+      - ["{{history.founded}}", "Founded on the plain, open for trade.", "Cities in the region were built on hills, for defence. Jaipur was planned on flat ground as a city for trade and commerce, by Sawai Jai Singh II and his architect-planner, Vidyadhar."]
+      - ["{{history.built}}", "Built in four years, then filled with traders.", "Most of the streets, squares and royal buildings were finished within four years, and the king sent royal invitations to traders to settle in the new city."]
+      - ["Chaupar", "Avenues as markets.", "The main avenues were designed as markets, with uniform shopfronts. Where they cross, the city opens into great squares called chaupars. The avenues are still its bazaars."]
+      - ["{{history.inscribed}}", "Still trading.", "UNESCO made the walled city a World Heritage site, noting that it has kept its commercial, artisanal and cooperative traditions to this day."]
+  bridge:
+    headline: "Three centuries on, the traders are still here."
     lead: >-
-      Most business decisions in Jaipur run on a hunch, a cousin's advice and whatever the shop next door did.
-      The data to do better is public, just scattered. I read it, one industry at a time, and publish what it says.
+      What most of them don't have is the numbers: what customers reward, where the gaps are, what's changing on
+      their street. Big platforms see that kind of data every day. The family shop on the corner usually doesn't.
+      This project is for the shop.
     cols:
       - "**Who it's for.** Anyone running a business in Jaipur, whatever its size, and anyone planning to start one. A single café counts as much as a chain."
       - "**What's live.** The Jaipur Café Index: {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, re-measured every two weeks, with {{cafes.findings}} findings in plain words."
       - "**What's next.** Jewellery, the trade this city is known for around the world. The research is done and checked, and the site is being built. After that, you help choose."
-      - "**How it's made.** Public listings and trade data, the same method every time, aggregates only. Every finding is graded and says what it doesn't prove."
+      - "**How it's made.** Public listings and trade data, the same method every time, aggregates only. Every finding is graded and says what it doesn't prove. Free, and nothing for sale."
   picker:
     headline: "Find your trade."
     lede: "Pick yours and see what's here for you today."
@@ -62,17 +81,9 @@ home:
       Tell me your trade and the question you'd most like answered about it. The best questions shape what I
       measure next.
     other_go: "Tell me"
-  stats:
-    headline: "From the Café Index."
-    all: "All {{cafes.findings}} findings"
-  board:
-    headline: "Block by block."
-    facts:
-      - "Cafés are live, re-measured every two weeks."
-      - "Jewellery is next. The research is done."
-      - "Textiles, handicrafts and hotels are on the list."
-    action: "See what's next"
   close:
+    who: "I'm Sarthak Oberoi, a data analyst who grew up in Jaipur. I run this on my own and keep it free."
+    more: "More about me"
     headline: "Get the findings as they land."
     text: >-
       Free, on WhatsApp: fresh café findings twice a month, and one message when jewellery launches.

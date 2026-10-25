@@ -1,0 +1,19 @@
+# Dates on the site that don't come from an industry index: Jaipur's own history.
+# Each one is quoted from a public source, and pipeline/check.py refuses any whose value isn't in its own quote.
+# The copy uses them as {{history.<key>}}. Add a fact here (with its source) before using a new date anywhere.
+
+source:
+  name: "UNESCO World Heritage Centre: Jaipur City, Rajasthan"
+  url: "https://whc.unesco.org/en/list/1605/"
+  read_on: "2026-10-25"
+
+facts:
+  founded:
+    value: "1727"
+    quote: "The walled city of Jaipur, in India's north-western state of Rajasthan was founded in 1727 by Sawai Jai Singh II."
+  built:
+    value: "1731"
+    quote: "most of the city infrastructure, public and royal spaces were completed within a span of four years, from 1727 – 1731 CE along with special royal invitations to several traders inviting them to settle in this newly envisaged trade and commerce city."
+  inscribed:
+    value: "2019"
+    quote: "Date of Inscription: 2019"

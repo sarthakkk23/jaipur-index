@@ -142,6 +142,9 @@ class Site:
         if "cafes" not in self.data:
             raise BuildError("the café index is the proof on this site; its data is required")
         self.T = tokens(self.cfg, self.data)
+        self.H = yaml.safe_load((ROOT / "content" / "history.yaml").read_text(encoding="utf-8"))
+        for k, fact in self.H["facts"].items():
+            self.T[f"history.{k}"] = str(fact["value"])
         self.F = findings(self.data["cafes"])
         self.missing, self.used = [], []
         self.brand, self.au = self.cfg["brand"]["name"], self.cfg["author"]
@@ -335,41 +338,42 @@ class Site:
     # ================================================================ pages
     def home(self):
         pre, H = "", self.C["home"]
-        # ----- the hero: a sheet of Jaipur photographs with one text cell -----
-        cols = [["city-above", "kathputli"], ["badi-chaupar", "emerald", "coffee"], None,
-                ["gem-cutter", "print-blocks"], ["textile-stall", "workshop", "old-city-bw"]]
-        speeds = [0.12, -0.06, 0.03, 0.1, -0.08]
-        tones = ["pink", "blush", "stone", "clay"]
-        frames, k = [], 0
-        for c, names in enumerate(cols):
-            if names is None:
-                frames.append(f"""<div class="sheet-col sheet-wide" data-speed="{speeds[c]}">
-    <figure class="frame sh tone-{tones[k % 4]}">{self.pic("lattice", "(max-width: 760px) 100vw, 34vw", pre, eager=True)}<figcaption>{E(PHOTOS['lattice'][1])}</figcaption></figure>
-    <div class="cell">
-      <h1 id="hero-h">{E(H['hero']['headline'])}</h1>
-      <p>{self.f(H['hero']['sentence'])}</p>
-      <p class="cell-act"><a class="btn btn-accent" href="{self.cafe}/">{E(H['hero']['action'])}</a></p>
-      <p class="cell-links">{''.join(f'<a href="{h}">{E(t)}</a>' for h, t in self.C['nav'][:3])}</p>
-    </div>
-  </div>""")
-                k += 1
-                continue
-            fs = []
-            for n in names:
-                grow = PHOTOS[n][5] / PHOTOS[n][4]          # taller photographs take more of the column
-                fs.append(f'<figure class="frame sh tone-{tones[k % 4]}" style="flex-grow:{grow:.2f}">{self.pic(n, "(max-width: 760px) 50vw, 17vw", pre, eager=c < 2)}<figcaption>{E(PHOTOS[n][1])}</figcaption></figure>')
-                k += 1
-            frames.append(f'<div class="sheet-col" data-speed="{speeds[c]}">{"".join(fs)}</div>')
-        hero = f'<section class="sheet" aria-labelledby="hero-h">{"".join(frames)}</section>'
+        src = self.H["source"]
 
-        # ----- the problem and the promise -----
-        I = H["intro"]
-        intro = f"""<section class="board intro" aria-label="Why this exists">
-  <div class="t t-plain s12 rv"><p class="lead">{self.f(I['lead'])}</p>
+        # ----- the first screen: an honest way out, then the city's story -----
+        Y = H["hurry"]
+        hrefs = {"cafe": f"{self.cafe}/"}
+        links = "".join(f'<a href="{hrefs.get(h, h)}">{E(t)}</a>' for h, t in Y["links"])
+        hurry = f"""<section class="board hurry" aria-label="Skip to what you came for">
+  <div class="t tone-stone s12 hurry-tile rv"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
+  <p class="hurry-after small">{self.f(Y['after'])}</p></div>
+</section>"""
+        V = H["hero"]
+        hero = f"""<section class="board story-head" aria-labelledby="hero-h">
+  <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1><p class="statement">{self.f(V['text'])}</p>
+    <p class="small src"><a href="{src['url']}" rel="noopener">{E(src['name'])}</a></p></div>
+  {self.photo_tile("old-city-bw", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw")}
+</section>"""
+
+        # ----- a short history: four dated tiles, read left to right -----
+        S = H["history"]
+        shapes = ["s5 tone-blush", "s7 tone-stone", "s7 tone-pink", "s5 tone-ink"]
+        items = "".join(f"""<article class="t when rv {shapes[n % 4]}"><p class="when-mark">{self.f(mark)}</p>
+    <div class="when-text"><h3>{E(title)}</h3><p>{self.f(text)}</p></div></article>"""
+                        for n, (mark, title, text) in enumerate(S["items"]))
+        history = f"""<section class="board history" aria-labelledby="hist-h">
+  <div class="t t-plain s12 sec-head rv"><h2 id="hist-h">{E(S['headline'])}</h2><p class="small"><a href="{src['url']}" rel="noopener">{E(S['source'])}</a></p></div>
+  {items}
+</section>"""
+
+        # ----- the bridge: from the city's trades to this project -----
+        I = H["bridge"]
+        bridge = f"""<section class="board intro" aria-labelledby="bridge-h">
+  <div class="t t-plain s12 rv"><h2 id="bridge-h">{E(I['headline'])}</h2><p class="lead">{self.f(I['lead'])}</p>
   <div class="cols">{''.join(f'<p>{self.f(c)}</p>' for c in I['cols'])}</div></div>
 </section>"""
 
-        # ----- find your trade: the one live thing -----
+        # ----- find your trade: the one live thing; one photograph, the one that belongs to the answer -----
         K = H["picker"]
         jewel = self.ind["jewellery"]
         trades = [("cafes", self.ind["cafes"]["short"], f"{self.cafe}/", K["live"], "tone-pink"),
@@ -381,70 +385,42 @@ class Site:
             + (f'<span class="trade-tag">{E(tag)}</span>' if tag else "") + "</a>" for key, name, href, tag, tone in trades)
         ex = "".join(f'<li><b><span class="n">{E(num(self.F[i]["value"]))}</span>{E(self.F[i].get("unit", ""))}</b> {E(self.F[i]["headline"])}</li>'
                      for i in self.cfg["findings"]["picker"])
-        answers = [f"""<div class="ans" data-for="cafes"><h3>{E(K['cafes_head'])}</h3><p>{self.f(K['cafes_text'])}</p><ul class="ans-figs">{ex}</ul>
-      <p><a class="btn btn-paper" href="{self.cafe}/">{E(K['cafes_go'])}</a></p></div>""",
-                   f"""<div class="ans" data-for="jewellery" hidden><h3>{E(K['jewellery_head'])}</h3><p>{self.f(K['jewellery_text'])}</p>
-      <p><a class="btn btn-paper" href="updates/?pick=jewellery">{E(K['jewellery_go'])}</a></p></div>"""]
+        photos = {"cafes": "coffee", "jewellery": "gem-cutter", "textiles": "print-blocks", "handicrafts": "kathputli"}
+
+        def ans(key, head, body, href, go, hidden=True):
+            ph = photos.get(key)
+            pic = (f'<figure class="ans-pic">{self.pic(ph, "(max-width: 900px) 100vw, 40vw", pre)}<figcaption>{E(PHOTOS[ph][1])}</figcaption></figure>'
+                   if ph else "")
+            return (f'<div class="ans{" ans-has-pic" if ph else ""}" data-for="{key}"{" hidden" if hidden else ""}><div class="ans-text"><h3>{E(head)}</h3>{body}'
+                    f'<p><a class="btn btn-paper" href="{href}">{E(go)}</a></p></div>{pic}</div>')
+
+        answers = [ans("cafes", K["cafes_head"], f'<p>{self.f(K["cafes_text"])}</p><ul class="ans-figs">{ex}</ul>', f"{self.cafe}/", K["cafes_go"], hidden=False),
+                   ans("jewellery", K["jewellery_head"], f'<p>{self.f(K["jewellery_text"])}</p>', "updates/?pick=jewellery", K["jewellery_go"])]
         for c in self.candidates:
-            answers.append(f"""<div class="ans" data-for="{c['key']}" hidden><h3>{E(c['short'])}: {E(K['candidate_head'].lower())}</h3>
-      <p>{self.f(K['candidate_text'])}</p><p><a class="btn btn-paper" href="updates/?pick=next&amp;trade={quote(c['short'])}">{E(K['candidate_go'])}</a></p></div>""")
-        answers.append(f"""<div class="ans" data-for="other" hidden><h3>{E(K['other_head'])}</h3><p>{self.f(K['other_text'])}</p>
-      <p><a class="btn btn-paper" href="updates/?pick=next">{E(K['other_go'])}</a></p></div>""")
+            answers.append(ans(c["key"], f"{c['short']}: {K['candidate_head'].lower()}", f'<p>{self.f(K["candidate_text"])}</p>',
+                               f"updates/?pick=next&amp;trade={quote(c['short'])}", K["candidate_go"]))
+        answers.append(ans("other", K["other_head"], f'<p>{self.f(K["other_text"])}</p>', "updates/?pick=next", K["other_go"]))
         picker = f"""<section class="board picker" id="trades" aria-labelledby="trades-h">
   <div class="t t-plain s4 pk-head rv"><h2 id="trades-h">{E(K['headline'])}</h2><p>{self.f(K['lede'])}</p></div>
   <div class="trades s8">{buttons}</div>
   <div class="t tone-ink answer s12" id="answer" aria-live="polite">{''.join(answers)}</div>
 </section>"""
 
-        # ----- three figures that refuse to line up -----
-        S = H["stats"]
-        a, b, c = self.cfg["findings"]["stats"]
-        stats = f"""<section class="board stats" aria-labelledby="stats-h">
-  {self.finding_tile(a, "st-tall t-accent", with_limit=False)}
-  <div class="st-notch rv"><h2 id="stats-h">{E(S['headline'])}</h2><p><a class="link" href="{self.cafe}/insights/">{self.f(S['all'])}</a></p></div>
-  {self.finding_tile(b, "st-mid tone-ink", with_limit=False)}
-  {self.finding_tile(c, "st-low tone-clay", with_limit=False)}
+        # ----- the close: who's behind it, and the one action -----
+        C = H["close"]
+        portrait = ('<figure class="t t-photo s3 who-pic rv"><picture><source type="image/webp" srcset="img/sarthak-street-400.webp 400w, img/sarthak-street-800.webp 800w" sizes="(max-width: 900px) 50vw, 25vw">'
+                    f'<img src="img/sarthak-street-800.jpg" srcset="img/sarthak-street-400.jpg 400w, img/sarthak-street-800.jpg 800w" sizes="(max-width: 900px) 50vw, 25vw" width="800" height="1542" alt="{E(self.au["name"])}" loading="lazy" decoding="async"></picture></figure>')
+        close = f"""<section class="board close-who" aria-labelledby="close-h">
+  {portrait}
+  <div class="t tone-blush s4 who-text rv"><p class="statement">{self.f(C['who'])}</p><p><a class="link" href="about/">{E(C['more'])}</a></p></div>
+  <div class="t t-accent s5 who-act rv"><h2 id="close-h">{E(C['headline'])}</h2><p>{self.f(C['text'])}</p><p><a class="btn btn-paper" href="updates/">{E(C['action'])}</a></p></div>
 </section>"""
 
-        # ----- the city cut into blocks: one photograph across the board -----
-        B = H["board"]
-        special = {(0, 0): f'<div class="mz mz-c tone-pink"><h2>{E(B["headline"])}</h2></div>',
-                   (1, 3): f'<div class="mz mz-c tone-paper"><p>{self.f(B["facts"][0])}</p></div>',
-                   (2, 1): f'<div class="mz mz-c tone-blush"><p>{self.f(B["facts"][1])}</p></div>',
-                   (3, 4): f'<div class="mz mz-c tone-stone"><p>{self.f(B["facts"][2])}</p></div>',
-                   (2, 5): f'<a class="mz mz-c mz-act" href="next/">{E(B["action"])}</a>'}
-        aspect = PHOTOS["city-above"][4] / PHOTOS["city-above"][5]
-
-        def cut(cols, rows):
-            """Cover the cols x rows board with the photograph, uncropped in shape: its size in tile units, and each tile's offset."""
-            w = max(cols, rows * aspect)
-            h = w / aspect
-            ox, oy = (w - cols) / 2, (h - rows) / 2
-            pos = lambda c, r: (f"{(c + ox) * 100 / (w - 1):.2f}%", f"{(r + oy) * 100 / (h - 1):.2f}%")
-            return f"{w * 100:.0f}% {h * 100:.0f}%", pos
-
-        size_d, pos_d = cut(6, 4)
-        size_p, pos_p = cut(3, 8)        # on a phone the same 24 cells run three across, eight down
-        cells = []
-        for r in range(4):
-            for col in range(6):
-                if (r, col) in special:
-                    cells.append(special[(r, col)])
-                    continue
-                i = r * 6 + col
-                (x, y), (px, py) = pos_d(col, r), pos_p(i % 3, i // 3)
-                cells.append(f'<div class="mz" style="--x:{x};--y:{y};--px:{px};--py:{py}" aria-hidden="true"></div>')
-        self.used.append("city-above")
-        mosaic = (f'<section class="mosaic" aria-label="{E(B["headline"])}" '
-                  f'style="--img:url(img/city-above-1600.jpg);--size:{size_d};--psize:{size_p}">{"".join(cells)}</section>')
-
-        C = H["close"]
-        close = self.close_row(pre, C["headline"], C["text"], "updates/", C["action"], "lattice")
         live = [i for i in self.cfg["industries"] if i["status"] == "live"]
         ld = [{"@type": "ItemList", "name": f"{self.brand}: industry sites", "itemListElement": [
             {"@type": "ListItem", "position": n + 1, "item": {"@type": "WebSite", "name": i["name"], "url": f"{i['url']}/"}}
             for n, i in enumerate(live)]}]
-        return self.page("", self.p(H["title"]), self.p(H["description"]), "\n".join([hero, intro, picker, stats, mosaic, close]), ld, "home")
+        return self.page("", self.p(H["title"]), self.p(H["description"]), "\n".join([hurry, hero, history, bridge, picker, close]), ld, "home")
 
     def cafes(self):
         pre, P = "../", self.C["cafes"]

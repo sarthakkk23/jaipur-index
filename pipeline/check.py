@@ -6,6 +6,7 @@ if anything a visitor can read breaks the house rules.
      published data: a token value, a finding's value, or the wording of a published finding. Dates of the
      snapshot and of the build are allowed.
   3. Nothing for sale: no prices, fees, packages or "hire me".
+  4. Jaipur's own dates (content/history.yaml) each carry a source and a quote, and the date is in the quote.
 
 Usage: python pipeline/check.py   (run after build.py; it reads the data the build saved in .cache/)
 """
@@ -100,6 +101,15 @@ def main():
     overrides.update(dict(x.split("=", 1) for x in a.data))
     data = load_data(cfg, overrides)
     ok = allowed_numbers(data)
+    hist = yaml.safe_load((ROOT / "content" / "history.yaml").read_text(encoding="utf-8"))
+    if not (hist.get("source") or {}).get("url"):
+        errors.append("history.yaml: no source address")
+    for k, fact in (hist.get("facts") or {}).items():
+        v = str(fact.get("value", ""))
+        if not v or v not in str(fact.get("quote", "")):
+            errors.append(f"history.yaml: '{k}' ({v}) isn't in its own quote")
+        else:
+            ok.update(norm(n) for n in NUM.findall(v))
     pages = 0
     for page in sorted((ROOT / "dist").rglob("*.html")):
         rel = page.relative_to(ROOT / "dist")
