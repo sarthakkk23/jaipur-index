@@ -1,0 +1,72 @@
+# Jaipur Index: the main site. Every name and address the site uses lives here.
+#
+# SWITCHING TO YOUR OWN DOMAIN is one line: set `domain` below (e.g. "jaipurindex.in").
+#   - The main site moves to https://<domain>/, and canonical tags, the sitemap and share cards follow.
+#   - Every industry with a `subdomain` is linked as https://<subdomain>.<domain>/ (cafes.<domain>, jewellery.<domain>).
+#   Do it on the day the café site moves to cafes.<domain>, so its links never point at a page that isn't there yet.
+#   GitHub Pages also needs the domain under Settings → Pages; the build writes the CNAME file for you.
+# While `domain` is empty, the github.io addresses under `now` are used.
+
+brand:
+  name: "Jaipur Index"        # placeholder brand name; change freely
+  domain: ""                  # <- the one line. Empty = github.io preview addresses
+
+now:
+  base_url: "https://sarthakkk23.github.io/jaipur-index"
+
+author:
+  name: "Sarthak Oberoi"
+  linkedin: "https://www.linkedin.com/in/sarthak-oberoi-analyst/"
+  email: "sarthakoberoi12@gmail.com"
+  email_subject: "Jaipur Index"
+
+# The industries, in the order the site shows them.
+#   status: live | soon | candidate
+#   data:   where a live site publishes its aggregates (path under its own address). The main site reads its numbers
+#           from there at build time, so they always match the industry site. Nothing is typed in by hand.
+industries:
+  - key: cafes
+    name: "Jaipur Café Index"
+    short: "Cafés"
+    status: live
+    subdomain: cafes
+    now_url: "https://sarthakkk23.github.io/jaipur-cafe-pulse"
+    data: "data/insights.json"
+  - key: jewellery
+    name: "Jaipur Jewellery Index"
+    short: "Jewellery"
+    status: soon
+    subdomain: jewellery
+    now_url: ""                # no site yet
+  - key: textiles
+    short: "Textiles and block printing"
+    status: candidate
+  - key: handicrafts
+    short: "Handicrafts"
+    status: candidate
+  - key: hotels
+    short: "Hotels"
+    status: candidate
+
+# Free updates and questions. The site is static, so sign-ups post to a Google Form that writes to your own Google Sheet.
+#   provider: google_form | none
+#     none: the form still works. "Send" opens an email to you with what the person typed, so nothing is lost.
+#   action:  the form's .../formResponse address
+#   fields:  the form's entry IDs, one per question (see README: "Setting up the sign-up form")
+subscribe:
+  provider: none
+  action: ""
+  fields:
+    name: ""          # Short answer: "Your name"
+    contact: ""       # Short answer: "WhatsApp number"
+    industries: ""    # Checkboxes: "Cafés" / "Jewellery, when it launches" / "The next industry" (must match exactly)
+    question: ""      # Paragraph: "What do you wish you knew about your industry?" (optional)
+
+# The café findings the site shows, by their id in the café index's published data.
+#   picker: the three shown when someone picks "Cafés" in "Find your trade" (home page)
+#   stats:  the three figure tiles on the home page, tallest first
+#   proof:  the six on the Cafés page, in this order
+findings:
+  picker: [cluster, survey_word_of_mouth, delivery]
+  stats: [cluster, attention, survey_word_of_mouth]
+  proof: [cluster, attention, survey_word_of_mouth, delivery, cs_price_premium, ratings]

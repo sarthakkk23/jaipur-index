@@ -1,0 +1,50 @@
+# Build, check and deploy the main site to GitHub Pages.
+#   Pull requests: build + gate only.
+#   main and site/** branches: build + gate + deploy (site/** gives Sarthak a preview before he merges).
+#   Twice a week: rebuild, so the café figures follow the café index's own refresh without anyone touching this repo.
+name: site
+
+on:
+  push:
+    branches: [main, "site/**"]
+  pull_request:
+  schedule:
+    - cron: "30 6 * * 2,4"     # Tuesday and Thursday, 12:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Build (reads the café figures from the live café site)
+        run: python pipeline/build.py
+      - name: Gate (every number traces to published data)
+        run: python pipeline/check.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
