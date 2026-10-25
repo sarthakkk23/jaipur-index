@@ -336,7 +336,6 @@ class Site:
         return f"""<section class="board row-close" aria-labelledby="close-h">
   {self.photo_tile(photo, "c-side c-left", pre, "20vw", caption=False)}
   <div class="t t-accent c-main rv"><h2 id="close-h">{E(headline)}</h2><p>{self.f(text)}</p><p><a class="btn btn-paper" href="{href}"{data}>{E(action)}</a></p></div>
-  <div class="t tone-blush c-side c-right rv" aria-hidden="true"></div>
 </section>"""
 
     # ================================================================ pages

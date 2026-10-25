@@ -256,13 +256,13 @@ html:not(.js) .answer { display: none; }
 
 /* ---------- the close: one cropped row ---------- */
 .row-close { align-items: stretch; }
-.c-main { grid-column: 3 / 11; min-height: 360px; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+.c-main { grid-column: 3 / 13; margin-right: calc(-1 * var(--edge)); min-height: 360px; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
 .c-main h2 { max-width: 18ch; }
 .c-left { grid-column: 1 / 3; margin-left: calc(-1 * var(--edge)); min-height: 0; }
-.c-right { grid-column: 11 / 13; margin-right: calc(-1 * var(--edge)); }
 @media (max-width: 900px) {
-  .c-main { grid-column: span 2; order: -1; min-height: 300px; padding: 28px 22px; }
-  .c-left, .c-right { grid-column: span 1; height: 120px; min-height: 0; }
+  .c-main { grid-column: 1 / -1; order: -1; min-height: 300px; padding: 28px 22px; }
+  .c-main { margin-right: 0; }
+  .c-left { grid-column: 1 / -1; height: 140px; min-height: 0; margin-left: 0; }
 }
 
 /* ---------- page heads ---------- */
