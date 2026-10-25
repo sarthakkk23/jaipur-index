@@ -23,6 +23,43 @@
     tiles.forEach((t) => io.observe(t));
   } else showAll();
 
+  // ---------- the story: one moment at a time; the reader turns the page ----------
+  const box = document.querySelector(".story-box");
+  if (box) {
+    const steps = [...box.querySelectorAll(".step")], dots = [...box.querySelectorAll(".dot-btn")];
+    const next = box.querySelector(".story-next"), back = box.querySelector(".story-back"), nav = box.querySelector(".story-nav");
+    let at = 0;
+    const show = (i, dir) => {
+      at = (i + steps.length) % steps.length;
+      steps.forEach((s, n) => {
+        const on = n === at;
+        s.hidden = !on;
+        if (on && dir && !reduce) { s.classList.add(dir > 0 ? "from-right" : "from-left"); void s.offsetWidth; s.classList.remove("from-right", "from-left"); }
+      });
+      dots.forEach((d, n) => { d.classList.toggle("seen", n < at); n === at ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current"); });
+      back.disabled = at === 0;
+      next.textContent = at === steps.length - 1 ? next.dataset.again : next.dataset.next;
+    };
+    box.classList.add("story-on");
+    nav.hidden = false;
+    next.addEventListener("click", () => show(at === steps.length - 1 ? 0 : at + 1, 1));
+    back.addEventListener("click", () => show(at - 1, -1));
+    dots.forEach((d, n) => d.addEventListener("click", () => show(n, n > at ? 1 : -1)));
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(Math.min(at + 1, steps.length - 1), 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(Math.max(at - 1, 0), -1); }
+    });
+    // a swipe on a phone turns the page too
+    let x0 = null;
+    box.querySelector(".steps").addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+    box.querySelector(".steps").addEventListener("pointerup", (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) dx < 0 ? show(Math.min(at + 1, steps.length - 1), 1) : show(Math.max(at - 1, 0), -1);
+    });
+    show(0, 0);
+  }
+
   // ---------- find your trade: pick one, the board answers in place ----------
   const answer = document.getElementById("answer");
   const trades = [...document.querySelectorAll(".trade[data-trade]")];

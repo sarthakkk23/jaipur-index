@@ -347,25 +347,31 @@ class Site:
         hrefs = {"cafe": f"{self.cafe}/"}
         links = "".join(f'<a href="{hrefs.get(h, h)}">{E(t)}</a>' for h, t in Y["links"])
         hurry = f"""<div class="hurry"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
-    <p class="hurry-after">{self.f(Y['after'])}</p></div>"""
+    <p class="hurry-after"><a href="#story">{self.f(Y['after'])}</a></p></div>"""
         V = H["hero"]
         hero = f"""<section class="board story-head" aria-labelledby="hero-h">
   <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1>
-    {hurry}
-    <p class="statement">{self.f(V['text'])}</p>
-    <p class="small src"><a href="{src['url']}" rel="noopener">{E(src['name'])}</a></p></div>
+    {hurry}</div>
   {self.photo_tile("pink-bazaar", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw", eager=True)}
 </section>"""
 
-        # ----- a short history: four dated tiles, read left to right -----
+        # ----- the story: one moment at a time, turned by the reader (all four are in the page without script) -----
         S = H["history"]
-        shapes = ["s5 tone-blush", "s7 tone-stone", "s7 tone-pink", "s5 tone-ink"]
-        items = "".join(f"""<article class="t when rv {shapes[n % 4]}"><p class="when-mark">{self.f(mark)}</p>
-    <div class="when-text"><h3>{E(title)}</h3><p>{self.f(text)}</p></div></article>"""
+        tones = ["tone-blush", "tone-stone2", "tone-pink", "tone-ink"]
+        steps = "".join(f"""<article class="step {tones[n % 4]}" id="step-{n + 1}" data-step="{n}" aria-label="{n + 1} of {len(S['items'])}">
+      <p class="step-mark">{self.f(mark)}</p><div class="step-text"><h3>{E(title)}</h3><p>{self.f(text)}</p></div></article>"""
                         for n, (mark, title, text) in enumerate(S["items"]))
-        history = f"""<section class="board history" aria-labelledby="hist-h">
-  <div class="t t-plain s12 sec-head rv"><h2 id="hist-h">{E(S['headline'])}</h2><p class="small"><a href="{src['url']}" rel="noopener">{E(S['source'])}</a></p></div>
-  {items}
+        dots = "".join(f'<button type="button" class="dot-btn" data-go="{n}" aria-label="{E(self.p(mark))}: {E(title)}">{self.f(mark)}</button>'
+                       for n, (mark, title, _) in enumerate(S["items"]))
+        history = f"""<section class="board history" id="story" aria-labelledby="hist-h">
+  <div class="t t-plain s12 story-box rv">
+    <div class="story-top"><h2 id="hist-h">{E(S['headline'])}</h2><p class="story-hint">{E(S['hint'])}</p></div>
+    <div class="steps" aria-live="polite">{steps}</div>
+    <div class="story-nav" hidden><div class="dots" role="group" aria-label="Moments">{dots}</div>
+      <p class="story-btns"><button type="button" class="btn btn-quiet story-back">{E(S['back'])}</button>
+      <button type="button" class="btn btn-accent story-next" data-next="{E(S['next'])}" data-again="{E(S['again'])}">{E(S['next'])}</button></p></div>
+    <p class="small"><a href="{src['url']}" rel="noopener">{E(S['source'])}</a></p>
+  </div>
 </section>"""
 
         # ----- the bridge: from the city's trades to this project -----

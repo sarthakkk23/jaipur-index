@@ -34,18 +34,18 @@ home:
     after: "Otherwise, start with the city. It's a good story, and it's short."
   hero:
     headline: "Jaipur was built to trade."
-    text: >-
-      In {{history.founded}}, Sawai Jai Singh II laid out a new city on the plain below the Amber hills. Its main
-      avenues were designed as markets, and he invited traders to come and settle. Those avenues are still the
-      city's bazaars.
   history:
-    headline: "A short history."
+    headline: "How Jaipur was built to trade."
+    hint: "Four moments. Tap to turn the page."
+    next: "Next"
+    back: "Back"
+    again: "Start again"
     source: "Every date here is from UNESCO's World Heritage listing of Jaipur City."
     items:
-      - ["{{history.founded}}", "Founded on the plain, open for trade.", "Cities in the region were built on hills, for defence. Jaipur was planned on flat ground as a city for trade and commerce, by Sawai Jai Singh II and his architect-planner, Vidyadhar."]
-      - ["{{history.built}}", "Built in four years, then filled with traders.", "Most of the streets, squares and royal buildings were finished within four years, and the king sent royal invitations to traders to settle in the new city."]
-      - ["Chaupar", "Avenues as markets.", "The main avenues were designed as markets, with uniform shopfronts. Where they cross, the city opens into great squares called chaupars. The avenues are still its bazaars."]
-      - ["{{history.inscribed}}", "Still trading.", "UNESCO made the walled city a World Heritage site, noting that it has kept its commercial, artisanal and cooperative traditions to this day."]
+      - ["{{history.founded}}", "A city on the plain.", "Sawai Jai Singh II and his architect, Vidyadhar, planned Jaipur on flat ground below the Amber hills: a city built for trade, not a hill fort."]
+      - ["{{history.built}}", "Built in four years.", "Most of the streets, squares and royal buildings were finished within four years. Then the king invited traders to come and settle."]
+      - ["Chaupar", "Avenues as markets.", "The main avenues were designed as markets, with uniform shopfronts. Where they cross, the city opens into great squares called chaupars."]
+      - ["{{history.inscribed}}", "Still trading.", "UNESCO made the walled city a World Heritage site, noting it has kept its commercial, artisanal and cooperative traditions to this day."]
   bridge:
     headline: "Three centuries on, the traders are still here."
     lead: >-
