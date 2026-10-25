@@ -64,6 +64,67 @@
     show(0, 0);
   }
 
+  // ---------- guess first: the reader guesses, then sees the real figure ----------
+  const game = document.querySelector(".guess");
+  if (game) {
+    const S = JSON.parse(game.dataset.s), total = +game.dataset.total;
+    const cards = [...game.querySelectorAll(".gq")], marks = [...game.querySelectorAll(".gq-marks i")];
+    const nav = game.querySelector(".gq-nav"), nextBtn = game.querySelector(".gq-next"), end = game.querySelector(".gq-end");
+    let at = 0, hits = 0;
+    const fill = (t, o) => t.replace(/\{(\w+)\}/g, (_, k) => o[k]);
+    cards.forEach((c) => {
+      const range = c.querySelector("input"), out = c.querySelector("output"), unit = c.dataset.unit;
+      const say = () => { out.textContent = `${range.value}${unit}`; range.setAttribute("aria-valuetext", `${range.value}${unit}`); };
+      range.addEventListener("input", say);
+      say();
+      c.querySelector(".gq-lock").addEventListener("click", () => {
+        const guess = +range.value, real = parseFloat(c.dataset.value), d = guess - real, off = Math.abs(d);
+        const word = off <= 2 ? S.spot : off <= 10 ? S.near : S.far;   // "close" means within ten points, the same line the score uses
+        c.querySelector(".gq-verdict").textContent = off <= 2 ? word : `${word} ${fill(S.gap, { d: Math.round(off), dir: d < 0 ? S.under : S.over })}`;
+        if (off <= 10) hits++;
+        c.classList.add("shown");
+        range.disabled = true; c.querySelector(".gq-lock").disabled = true;
+        requestAnimationFrame(() => {
+          c.querySelector(".gq-you").style.setProperty("--w", `${guess}%`);
+          c.querySelector(".gq-real").style.setProperty("--w", `${Math.min(100, real)}%`);
+        });
+        nextBtn.textContent = at === total - 1 ? S.finish : S.next;
+        nav.hidden = false;
+        nextBtn.focus({ preventScroll: true });
+        if (matchMedia("(max-width: 900px)").matches)   // on a phone the answer is below the slider: bring it into view
+          c.querySelector(".gq-reveal").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      });
+    });
+    const show = (i) => {
+      at = i;
+      cards.forEach((c, n) => { c.hidden = n !== i; });
+      marks.forEach((m, n) => { m.classList.toggle("done", n < i); m.classList.toggle("now", n === i); });
+      nav.hidden = true;
+    };
+    const reset = () => {
+      hits = 0;
+      cards.forEach((c) => {
+        c.classList.remove("shown");
+        const r = c.querySelector("input"); r.disabled = false; r.value = 50; r.dispatchEvent(new Event("input"));
+        c.querySelector(".gq-lock").disabled = false;
+        c.querySelectorAll(".gq-bars i").forEach((b) => b.style.removeProperty("--w"));
+      });
+      end.hidden = true; game.querySelector(".gq-list").hidden = false; game.querySelector(".gq-marks").hidden = false;
+      show(0);
+    };
+    nextBtn.addEventListener("click", () => {
+      if (at < total - 1) { show(at + 1); cards[at].querySelector("input").focus({ preventScroll: true }); return; }
+      game.querySelector(".gq-score").textContent = fill(S.done, { n: hits, total });
+      game.querySelector(".gq-more").textContent = fill(S.done_more, { all: game.dataset.all });
+      game.querySelector(".gq-list").hidden = true; game.querySelector(".gq-marks").hidden = true; nav.hidden = true;
+      end.hidden = false;
+    });
+    game.querySelector(".gq-again").addEventListener("click", reset);
+    game.classList.add("gq-on");
+    game.querySelector(".gq-marks").hidden = false;
+    show(0);
+  }
+
   // ---------- find your trade: pick one, the board answers in place ----------
   const answer = document.getElementById("answer");
   const trades = [...document.querySelectorAll(".trade[data-trade]")];

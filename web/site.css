@@ -194,7 +194,7 @@ html:not(.js) .story-hint { display: none; }
 }
 
 /* ---------- home: the problem, over four columns ---------- */
-.intro .t { padding-top: clamp(40px, 6vw, 88px); padding-bottom: clamp(40px, 6vw, 88px); }
+.intro .t { padding-top: clamp(32px, 4vw, 56px); padding-bottom: clamp(32px, 4vw, 56px); }
 .lead { font-size: clamp(1.375rem, 1.05rem + 1.1vw, 2rem); line-height: 1.22; letter-spacing: -0.015em; max-width: 58ch; }
 .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 28px; margin-top: clamp(40px, 5vw, 72px); }
 .cols p { font-size: var(--t4); line-height: 1.5; }
@@ -256,13 +256,13 @@ html:not(.js) .answer { display: none; }
 
 /* ---------- the close: one cropped row ---------- */
 .row-close { align-items: stretch; }
-.c-main { grid-column: 3 / 11; min-height: 360px; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+.c-main { grid-column: 3 / 13; margin-right: calc(-1 * var(--edge)); min-height: 360px; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
 .c-main h2 { max-width: 18ch; }
 .c-left { grid-column: 1 / 3; margin-left: calc(-1 * var(--edge)); min-height: 0; }
-.c-right { grid-column: 11 / 13; margin-right: calc(-1 * var(--edge)); }
 @media (max-width: 900px) {
-  .c-main { grid-column: span 2; order: -1; min-height: 300px; padding: 28px 22px; }
-  .c-left, .c-right { grid-column: span 1; height: 120px; min-height: 0; }
+  .c-main { grid-column: 1 / -1; order: -1; min-height: 300px; padding: 28px 22px; }
+  .c-main { margin-right: 0; }
+  .c-left { grid-column: 1 / -1; height: 140px; min-height: 0; margin-left: 0; }
 }
 
 /* ---------- page heads ---------- */
@@ -287,8 +287,65 @@ html:not(.js) .answer { display: none; }
 .sticky { position: sticky; top: calc(var(--bar) + 8px); align-self: start; height: calc(100svh - var(--bar) - 16px); }
 @media (max-width: 900px) { .sticky { position: relative; top: 0; height: 70vw; } }
 
-.proof .t-fig { min-height: 420px; }
-.proof .tone-clay a { color: var(--paper); }
+/* ---------- cafés: guess first, then the real figure ---------- */
+.guess { display: grid; gap: 24px; padding-top: clamp(32px, 4vw, 56px); }
+.guess .sec-head { min-height: 0; }
+.gq-marks { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.gq-marks[hidden] { display: none; }
+.gq-marks i { height: 8px; background: var(--ink); opacity: .15; transition: opacity .3s ease, background-color .3s ease; }
+.gq-marks i.done { opacity: .55; }
+.gq-marks i.now { opacity: 1; background: var(--red); }
+.gq-list { display: grid; gap: var(--gap); }
+.gq-list[hidden] { display: none; }
+.gq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gap); }
+.gq-ask, .gq-reveal { padding: clamp(24px, 3vw, 44px); min-height: 400px; display: flex; flex-direction: column; gap: 20px; }
+.gq-ask { justify-content: space-between; }
+.gq-q { font-size: clamp(1.25rem, 1rem + .9vw, 2rem); line-height: 1.2; letter-spacing: -0.015em; max-width: 26ch; font-weight: 500; }   /* a question: a statement, not a heading */
+.gq-controls { display: grid; gap: 14px; }
+.gq-label { font-weight: 600; }
+.gq-label output { font-size: var(--t2); font-weight: 500; letter-spacing: -0.02em; margin-left: 6px; }
+.gq input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: none; margin: 0; cursor: pointer; }
+.gq input[type="range"]::-webkit-slider-runnable-track { height: 10px; background: var(--pink); }
+.gq input[type="range"]::-moz-range-track { height: 10px; background: var(--pink); }
+.gq input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; margin-top: -10px; background: var(--ink); border: 0; border-radius: 0; }
+.gq input[type="range"]::-moz-range-thumb { width: 30px; height: 30px; background: var(--ink); border: 0; border-radius: 0; }
+.gq input[type="range"]:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.gq-lock { justify-self: start; }
+.gq-reveal { justify-content: flex-end; position: relative; }
+.gq-reveal .fig-cap { font-size: var(--t3); line-height: 1.25; }
+.gq-reveal a { color: var(--paper); }
+.gq-bars { display: grid; gap: 10px; margin-bottom: auto; }
+.gq-bars p { display: grid; grid-template-columns: 9em minmax(0, 1fr); align-items: center; gap: 12px; }
+.gq-bars i { display: block; height: 18px; width: var(--w, 0%); transition: width .9s var(--ease); }
+.gq-you { background: var(--paper); }
+.gq-real { background: var(--pink); }
+.gq-verdict { font-size: var(--t3); font-weight: 600; }
+.gq-end { padding: clamp(28px, 4vw, 56px); display: grid; gap: 16px; min-height: 300px; align-content: center; }
+.gq-end[hidden], .gq-nav[hidden] { display: none; }
+.gq-score { font-size: var(--t2); line-height: 1.15; max-width: 24ch; }
+.gq-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.gq-nav { display: flex; justify-content: flex-end; }
+/* without script: every finding with its figure, no sliders */
+html:not(.js) .gq-controls, html:not(.js) .gq-bars, html:not(.js) .gq-verdict { display: none; }
+html:not(.js) .gq-ask, html:not(.js) .gq-reveal { min-height: 0; }
+.js .gq-all { display: none; }
+/* with script: one at a time, the answer hidden until the guess is in */
+.gq-on .gq[hidden] { display: none; }
+.gq-on .gq:not(.shown) .gq-reveal > * { visibility: hidden; }
+.gq-on .gq:not(.shown) .gq-reveal::before { content: "?"; position: absolute; left: clamp(24px, 3vw, 44px); bottom: clamp(16px, 2vw, 32px);
+  font-size: clamp(6rem, 3rem + 10vw, 14rem); line-height: .8; font-weight: 500; color: var(--pink); }
+.gq-on .gq.shown .gq-reveal > * { animation: gq-in .6s var(--ease) both; }
+.gq-on .gq.shown .gq-reveal > :nth-child(3) { animation-delay: .35s; }
+.gq-on .gq.shown .gq-reveal > :nth-child(n+4) { animation-delay: .5s; }
+@keyframes gq-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) { .gq-bars i { transition: none; } .gq-on .gq.shown .gq-reveal > * { animation: none; } }
+@media (max-width: 900px) {
+  .gq { grid-template-columns: 1fr; }
+  .gq-ask, .gq-reveal { min-height: 0; }
+  .gq-on .gq:not(.shown) .gq-reveal { min-height: 180px; }
+  .gq-bars p { grid-template-columns: 7.5em minmax(0, 1fr); }
+  .gq-nav .btn, .gq-lock { width: 100%; }
+}
 
 /* ---------- jewellery ---------- */
 .q { min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
