@@ -82,8 +82,17 @@ home:
       measure next.
     other_go: "Tell me"
   close:
-    who: "I'm Sarthak Oberoi, a data analyst who grew up in Jaipur. I run this on my own and keep it free."
+    who: "I'm Sarthak Oberoi, a data analyst who grew up in Jaipur."
+    who_more:
+      - >-
+        In any market, someone is ahead because they know something the others don't. It rarely sits in the big,
+        obvious numbers. It hides in the part nobody thinks to check: the hour you open, how your listing reads on one
+        app, what a customer mentions in passing.
+      - >-
+        My work is finding that edge and writing it down in plain words, along with where it stops. I run this on my
+        own and keep it free. No platform or business pays to appear.
     more: "More about me"
+    linkedin: "LinkedIn"
     headline: "Get the findings as they land."
     text: >-
       Free, on WhatsApp: fresh café findings twice a month, and one message when jewellery launches.

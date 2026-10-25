@@ -184,8 +184,11 @@ html:not(.js) .answer { display: none; }
 .close-who .t { min-height: 380px; }
 .who-pic img { object-position: 50% 25%; }
 .who-text, .who-act { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+.who-text { justify-content: flex-start; gap: 14px; }
+.who-text .statement { margin-bottom: 4px; }
+.who-links { margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-weight: 600; }
 .who-act { justify-content: center; padding: clamp(28px, 3vw, 44px); }
-@media (max-width: 900px) { .close-who .who-pic { grid-column: span 1; min-height: 0; } .close-who .who-text { grid-column: span 1; min-height: 0; } .close-who .t { min-height: 260px; } }
+@media (max-width: 900px) { .close-who .who-pic { grid-column: span 2; min-height: 90vw; } .close-who .who-text { grid-column: span 2; min-height: 0; } .close-who .t { min-height: 260px; } }
 
 /* ---------- the close: one cropped row ---------- */
 .row-close { align-items: stretch; }

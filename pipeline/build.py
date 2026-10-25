@@ -414,7 +414,8 @@ class Site:
                     f'<img src="img/sarthak-street-800.jpg" srcset="img/sarthak-street-400.jpg 400w, img/sarthak-street-800.jpg 800w" sizes="(max-width: 900px) 50vw, 25vw" width="800" height="1542" alt="{E(self.au["name"])}" loading="lazy" decoding="async"></picture></figure>')
         close = f"""<section class="board close-who" aria-labelledby="close-h">
   {portrait}
-  <div class="t tone-blush s4 who-text rv"><p class="statement">{self.f(C['who'])}</p><p><a class="link" href="about/">{E(C['more'])}</a></p></div>
+  <div class="t tone-blush s4 who-text rv"><p class="statement">{self.f(C['who'])}</p>{''.join(f'<p>{self.f(x)}</p>' for x in C['who_more'])}
+    <p class="who-links"><a class="link" href="about/">{E(C['more'])}</a><a class="link" href="{self.au['linkedin']}" rel="noopener">{E(C['linkedin'])}</a></p></div>
   <div class="t t-accent s5 who-act rv"><h2 id="close-h">{E(C['headline'])}</h2><p>{self.f(C['text'])}</p><p><a class="btn btn-paper" href="updates/">{E(C['action'])}</a></p></div>
 </section>"""
 
