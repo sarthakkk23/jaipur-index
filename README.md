@@ -33,7 +33,7 @@ web/img/                photographs from Unsplash (credited on each page and on 
 .github/workflows/site.yml   PRs: build + gate. main and site/** branches: + deploy. Twice a week: rebuild
 ```
 
-**Pages:** `/` (the front door: an honest skip-to-it note, a short history of Jaipur, then "Find your trade"), `/cafes/`, `/jewellery/` (coming soon), `/next/` (the
+**Pages:** `/` (the front door: an honest skip-to-it note, a short history of Jaipur, then "Find your trade"), `/cafes/`, `/jewellery/`, `/next/` (the
 candidates and the vote), `/about/` (who, how it's made, photo credits), `/updates/` (sign-up and questions), and a 404.
 
 **Where the numbers come from.** None are typed in. At build time `build.py` reads the café index's own published
@@ -43,10 +43,8 @@ rebuilds twice a week, so the front door follows each café refresh without anyo
 finished page and fails if any visible number isn't in that data. The one exception is Jaipur's history: its dates live in
 `content/history.yaml`, each with its source and the quoted sentence, and the gate fails if a date isn't in its own quote.
 
-**Jewellery, before its site is live.** The Jewellery page shows a few of the jewellery index's findings (`show` under
-jewellery in `site.config.yaml`). Until that site is public they're read from `content/jewellery_insights.json`, a copy
-of the jewellery build's `site/dist/data/insights.json`; copy it again after each jewellery refresh. When the jewellery
-site goes live, set its `now_url` and status, and delete `snapshot` so the build reads the live file instead.
+**Jewellery.** The Jewellery page shows a few of the jewellery index's findings (`show` under jewellery in
+`site.config.yaml`), read from its live `data/insights.json` at each build, the same way as the café figures.
 
 ## Build locally
 

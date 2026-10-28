@@ -23,12 +23,13 @@ home:
   title: "{{brand}} · Free data on Jaipur's industries, starting with cafés"
   description: >-
     Jaipur was built to trade. Free, independent data for anyone who runs or plans to start a business here: the
-    Jaipur Café Index is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month. Jewellery is next.
+    Jaipur Café Index is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month, and the Jaipur
+    Jewellery Index follows the jewellery trade each month.
   hurry:
     text: "I'll be straight with you: this page is the long way round. If you already know what you're after, skip to it."
     links:
       - ["cafe", "Café data: the Café Index"]
-      - ["jewellery/", "Jewellery: tell me when it's live"]
+      - ["jewel", "Jewellery data: the Jewellery Index"]
       - ["updates/", "Free updates on WhatsApp"]
       - ["updates/#ask", "Ask me a question"]
     after: "Otherwise, start with the city. It's a good story, and it's short."
@@ -61,11 +62,11 @@ home:
     cafes_text: >-
       {{cafes.scene.core_cafes}} cafés measured in C-Scheme and Malviya Nagar. Three of the {{cafes.findings}} findings:
     cafes_go: "Open the Café Index"
-    jewellery_head: "Jewellery: coming soon."
+    jewellery_head: "Jewellery: live now."
     jewellery_text: >-
-      The research is done and checked. It covers exports, the US tariff, the emerald trade, and what they mean for
-      makers and shops at home.
-    jewellery_go: "Tell me when it's live"
+      {{jewellery.findings}} findings from public records: exports, the US tariff, the emerald trade, and what they
+      mean for makers and shops at home. Plus an owner's playbook, and the figures that moved this month.
+    jewellery_go: "Open the Jewellery Index"
     candidate_head: "Not measured yet."
     candidate_text: >-
       It's on the list for after jewellery. Votes decide which comes first, and yours counts.
@@ -89,7 +90,7 @@ home:
     linkedin: "LinkedIn"
     headline: "Get the findings as they land."
     text: >-
-      Free, on WhatsApp: fresh café findings twice a month, and one message when jewellery launches.
+      Free, on WhatsApp: fresh café findings twice a month, and the jewellery figures when they update each month.
     action: "Get free updates"
 
 # ---------------------------------------------------------------- cafés
@@ -145,28 +146,29 @@ cafes:
 
 # ---------------------------------------------------------------- jewellery
 jewellery:
-  title: "Jaipur Jewellery Index · Coming soon · {{brand}}"
+  title: "Jaipur Jewellery Index · Jaipur's jewellery trade, in public records · {{brand}}"
   description: >-
-    Coming soon: free, independent data on Jaipur's jewellery and gem trade. Exports, the US tariff, the emerald
-    trade, and what they mean for makers and shops at home.
-  headline: "Jewellery is next."
+    Free, independent data on Jaipur's jewellery and gem trade: exports, the US tariff, the emerald trade, and what
+    they mean for makers and shops at home. Updated monthly.
+  headline: "Jewellery is live."
   statement: >-
     Jaipur cuts, sets and ships jewellery to the world. What's happening to that trade is in public data, buried in
-    customs tables and trade reports. I've been digging through them. The research is done and checked; the site is
-    being built.
-  action: "Tell me when it's live"
-  note: "One message on WhatsApp when it launches. Nothing for sale."
-  questions_headline: "What it will answer."
+    customs tables and trade reports. I dug through them, checked every figure, and put them in one place.
+  action: "Open the Jewellery Index"
+  note: "Free. Figures updated each month. Nothing for sale."
+  questions_headline: "What it answers."
   questions:
     - ["Who took India's silver-jewellery business in America while the tariff was on, and is it coming back?", "For silver exporters"]
     - ["What's happening to the price of the emerald rough that Jaipur's cutters buy?", "For gem dealers and cutters"]
     - ["Plain gold or studded, silver or coloured stones: which exports are growing, and which are shrinking?", "For gold makers and exporters"]
     - ["What do the wedding season, metal prices and visitors mean for shops at home?", "For shops in the city"]
   found_headline: "What it's found so far."
-  found_lede: "A few of the {{jewellery.findings}} findings, each read from a public record and checked by separate code, ahead of the site."
+  found_lede: "A few of the {{jewellery.findings}} findings, each read from a public record and checked by separate code. The rest, with their charts, are on the Jewellery Index."
   how: "How I know:"
-  close_headline: "Be first to read it."
-  close_text: "Leave your WhatsApp number and you'll hear the day it launches. Nothing else, nothing for sale."
+  more: "Read it in full"
+  close_headline: "Get it each month."
+  close_text: "Leave your WhatsApp number and you'll hear when the jewellery figures update. Nothing else, nothing for sale."
+  close_action: "Get the monthly update"
 
 # ---------------------------------------------------------------- next
 next:
@@ -176,7 +178,7 @@ next:
     next one is chosen, and how to vote for yours.
   headline: "Your industry could be next."
   statement: >-
-    Cafés came first and jewellery comes next. What follows isn't decided yet, and the people who run these
+    Cafés came first and jewellery second. What follows isn't decided yet, and the people who run these
     businesses get a say.
   tests_headline: "Two tests decide it."
   tests:
@@ -206,7 +208,7 @@ about:
       app, what a customer mentions in passing. My work is finding that edge and writing it down in plain words,
       along with where it stops.
     - >-
-      Cafés came first because I was sitting in them anyway, so I may as well count them. Jewellery is next because
+      Cafés came first because I was sitting in them anyway, so I may as well count them. Jewellery came next because
       it's the trade this city is known for around the world.
     - >-
       I run this on my own and keep it free. No platform or business pays to appear, nothing here is for sale, and
@@ -224,11 +226,11 @@ about:
 updates:
   title: "Free updates · {{brand}}"
   description: >-
-    Free updates on WhatsApp: fresh café findings twice a month, one message when the Jaipur Jewellery Index
-    launches, and a vote on the next industry.
+    Free updates on WhatsApp: fresh café findings twice a month, the Jaipur Jewellery Index's figures each month,
+    and a vote on the next industry.
   headline: "Get the findings as they land."
   lede: >-
-    Free, on WhatsApp. Fresh café findings twice a month, one message when jewellery launches, and a say in what
+    Free, on WhatsApp. Fresh café findings twice a month, the jewellery figures each month, and a say in what
     comes next. Pick what you want.
   name: "Your name"
   contact: "Your WhatsApp number"
@@ -236,7 +238,7 @@ updates:
   pick: "Send me"
   picks:
     cafes: "Cafés"
-    jewellery: "Jewellery, when it launches"
+    jewellery: "Jewellery"
     next: "The next industry"
   question: "What do you wish you knew about your industry? (optional)"
   question_hint: "A question, a hunch you'd like checked, or the industry you want next"
