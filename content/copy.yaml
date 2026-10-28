@@ -162,6 +162,9 @@ jewellery:
     - ["What's happening to the price of the emerald rough that Jaipur's cutters buy?", "For gem dealers and cutters"]
     - ["Plain gold or studded, silver or coloured stones: which exports are growing, and which are shrinking?", "For gold makers and exporters"]
     - ["What do the wedding season, metal prices and visitors mean for shops at home?", "For shops in the city"]
+  found_headline: "What it's found so far."
+  found_lede: "A few of the {{jewellery.findings}} findings, each read from a public record and checked by separate code, ahead of the site."
+  how: "How I know:"
   close_headline: "Be first to read it."
   close_text: "Leave your WhatsApp number and you'll hear the day it launches. Nothing else, nothing for sale."
 

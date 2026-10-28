@@ -38,6 +38,9 @@ industries:
     status: soon
     subdomain: jewellery
     now_url: ""                # no site yet
+    data: "data/insights.json"
+    snapshot: "content/jewellery_insights.json"   # until the site is live: a copy of its dist/data/insights.json
+    show: ["1.1", "2.1", "2.2", "3.2", "5.1", "5.3"]   # the findings on the Jewellery page, by id
   - key: textiles
     short: "Textiles and block printing"
     status: candidate

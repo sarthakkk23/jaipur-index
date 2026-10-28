@@ -43,6 +43,11 @@ rebuilds twice a week, so the front door follows each café refresh without anyo
 finished page and fails if any visible number isn't in that data. The one exception is Jaipur's history: its dates live in
 `content/history.yaml`, each with its source and the quoted sentence, and the gate fails if a date isn't in its own quote.
 
+**Jewellery, before its site is live.** The Jewellery page shows a few of the jewellery index's findings (`show` under
+jewellery in `site.config.yaml`). Until that site is public they're read from `content/jewellery_insights.json`, a copy
+of the jewellery build's `site/dist/data/insights.json`; copy it again after each jewellery refresh. When the jewellery
+site goes live, set its `now_url` and status, and delete `snapshot` so the build reads the live file instead.
+
 ## Build locally
 
 ```bash

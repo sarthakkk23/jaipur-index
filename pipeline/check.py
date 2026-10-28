@@ -72,6 +72,7 @@ def allowed_numbers(data):
             add_text(v)
             add_text(f.get("headline", ""))
             add_text(f.get("limit", ""))
+            add_text(f.get("how", "") if isinstance(f.get("how"), str) else "")   # the jewellery index's source line
         cap = d["meta"].get("captured_on")
         if cap:
             dd = date.fromisoformat(cap)
