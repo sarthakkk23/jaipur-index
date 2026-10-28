@@ -157,6 +157,7 @@ class Site:
         self.brand, self.au = self.cfg["brand"]["name"], self.cfg["author"]
         self.ind = {i["key"]: i for i in self.cfg["industries"]}
         self.cafe = self.ind["cafes"]["url"]
+        self.jewel = self.ind["jewellery"]["url"]
         self.candidates = [i for i in self.cfg["industries"] if i["status"] == "candidate"]
         self.today = datetime.now(timezone.utc).date().isoformat()
         self.mail = f"mailto:{self.au['email']}?subject={quote(self.au.get('email_subject', self.brand))}"
@@ -288,7 +289,7 @@ class Site:
         live = [i for i in self.cfg["industries"] if i["status"] == "live"]
         jewel = self.ind.get("jewellery")
         inds = "".join(f'<a href="{i["url"]}/">{E(i["name"])}</a>' for i in live)
-        if jewel:
+        if jewel and jewel["status"] != "live":
             inds += f'<a href="{pre}jewellery/">{E(jewel["name"])} {E(Fo["soon"])}</a>'
         inds += f'<a href="{pre}next/">{E(dict(self.C["nav"])["next/"])}</a>'
         mail = entities(self.mail)
@@ -351,7 +352,7 @@ class Site:
 
         # ----- the first screen: an honest way out, then the city's story -----
         Y = H["hurry"]
-        hrefs = {"cafe": f"{self.cafe}/"}
+        hrefs = {"cafe": f"{self.cafe}/", "jewel": f"{self.jewel}/"}
         links = "".join(f'<a href="{hrefs.get(h, h)}">{E(t)}</a>' for h, t in Y["links"])
         hurry = f"""<div class="hurry"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
     <p class="hurry-after"><a href="#story">{self.f(Y['after'])}</a></p></div>"""
@@ -399,7 +400,7 @@ class Site:
         K = H["picker"]
         jewel = self.ind["jewellery"]
         trades = [("cafes", self.ind["cafes"]["short"], f"{self.cafe}/", K["live"], "tone-pink"),
-                  ("jewellery", jewel["short"], "jewellery/", K["soon"], "tone-blush")]
+                  ("jewellery", jewel["short"], f"{self.jewel}/", K["live"], "tone-blush")]
         trades += [(c["key"], c["short"], "next/", "", "tone-stone") for c in self.candidates]
         trades.append(("other", K["other"], "updates/", "", "tone-stone2"))
         buttons = "".join(
@@ -417,7 +418,7 @@ class Site:
                     f'<p><a class="btn btn-paper" href="{href}">{E(go)}</a></p></div>{pic}</div>')
 
         answers = [ans("cafes", K["cafes_head"], f'<p>{self.f(K["cafes_text"])}</p><ul class="ans-figs">{ex}</ul>', f"{self.cafe}/", K["cafes_go"], hidden=False),
-                   ans("jewellery", K["jewellery_head"], f'<p>{self.f(K["jewellery_text"])}</p>', "updates/?pick=jewellery", K["jewellery_go"])]
+                   ans("jewellery", K["jewellery_head"], f'<p>{self.f(K["jewellery_text"])}</p>', f"{self.jewel}/", K["jewellery_go"])]
         for c in self.candidates:
             answers.append(ans(c["key"], f"{c['short']}: {K['candidate_head'].lower()}", f'<p>{self.f(K["candidate_text"])}</p>',
                                f"updates/?pick=next&amp;trade={quote(c['short'])}", K["candidate_go"]))
@@ -511,7 +512,7 @@ class Site:
   <div class="t tone-clay s7 name rv"><h1 id="h">{E(J['headline'])}</h1></div>
   {self.photo_tile("gem-cutter", "s5 r2", pre, "(max-width: 760px) 100vw, 42vw", eager=True)}
   <div class="t t-plain s4 rv"><p class="statement">{self.f(J['statement'])}</p></div>
-  <div class="t t-accent s3 act rv"><a class="btn btn-paper" href="../updates/?pick=jewellery" data-pick="jewellery">{E(J['action'])}</a><p class="small">{self.f(J['note'])}</p></div>
+  <div class="t t-accent s3 act rv"><a class="btn btn-paper" href="{self.jewel}/">{E(J['action'])}</a><p class="small">{self.f(J['note'])}</p></div>
 </section>"""
         tones = ["s7 tone-blush", "s5 tone-stone", "s5 tone-ink", "s7 tone-pink"]
         qs = "".join(f'<div class="t q rv {tones[n % 4]}"><p class="q-text">{self.f(q)}</p><p class="small">{self.f(who)}</p></div>'
@@ -522,7 +523,7 @@ class Site:
 </section>"""
         tz = ["tone-stone", "tone-blush", "tone-pink"]
         tiles = "".join(f"""<article class="t t-fig rv s4 {tz[n % 3]}"><p class="fig"><span class="n">{E(num(x['value']))}</span><small>{E(x.get('unit', ''))}</small></p>
-    <div class="fig-foot"><p class="fig-cap">{E(x['headline'])}</p><p class="small"><b>{E(J['how'])}</b> {E(x.get('how', ''))}</p></div></article>"""
+    <div class="fig-foot"><p class="fig-cap">{E(x['headline'])}</p><p class="small"><b>{E(J['how'])}</b> {E(x.get('how', ''))} <a href="{self.jewel}/insights/#f-{x['id'].replace('.', '-')}">{E(J['more'])}</a></p></div></article>"""
                         for n, x in enumerate(self.JF[fid] for fid in self.ind["jewellery"].get("show") or []))
         found = f"""<section class="board found" aria-labelledby="found-h">
   <div class="t t-plain s12 sec-head rv"><h2 id="found-h">{E(J['found_headline'])}</h2><p>{self.f(J['found_lede'])}</p></div>
@@ -532,7 +533,7 @@ class Site:
   {self.photo_tile("emerald", "s8", pre, "(max-width: 760px) 100vw, 66vw")}
   {self.photo_tile("badi-chaupar", "s4", pre, "(max-width: 760px) 100vw, 33vw")}
 </section>"""
-        close = self.close_row(pre, J["close_headline"], J["close_text"], "../updates/?pick=jewellery", J["action"], "textile-stall", pick="jewellery")
+        close = self.close_row(pre, J["close_headline"], J["close_text"], "../updates/?pick=jewellery", J["close_action"], "textile-stall", pick="jewellery")
         return self.page("jewellery/", self.p(J["title"]), self.p(J["description"]), "\n".join([head, questions, found, pair, close]))
 
     def nxt(self):

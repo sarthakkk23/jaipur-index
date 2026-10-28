@@ -35,11 +35,10 @@ industries:
   - key: jewellery
     name: "Jaipur Jewellery Index"
     short: "Jewellery"
-    status: soon
+    status: live
     subdomain: jewellery
-    now_url: ""                # no site yet
+    now_url: "https://sarthakkk23.github.io/jaipur-jewellery-index"
     data: "data/insights.json"
-    snapshot: "content/jewellery_insights.json"   # until the site is live: a copy of its dist/data/insights.json
     show: ["1.1", "2.1", "2.2", "3.2", "5.1", "5.3"]   # the findings on the Jewellery page, by id
   - key: textiles
     short: "Textiles and block printing"
@@ -62,7 +61,7 @@ subscribe:
   fields:
     name: ""          # Short answer: "Your name"
     contact: ""       # Short answer: "WhatsApp number"
-    industries: ""    # Checkboxes: "Cafés" / "Jewellery, when it launches" / "The next industry" (must match exactly)
+    industries: ""    # Checkboxes: "Cafés" / "Jewellery" / "The next industry" (must match exactly)
     question: ""      # Paragraph: "What do you wish you knew about your industry?" (optional)
 
 # The café findings the site shows, by their id in the café index's published data.
