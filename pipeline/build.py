@@ -78,9 +78,11 @@ def addresses(cfg):
 def load_data(cfg, overrides):
     out = {}
     for ind in cfg["industries"]:
-        if ind["status"] != "live" or not ind.get("data"):
+        live = ind["status"] == "live" and ind.get("data")
+        if not live and not ind.get("snapshot"):
             continue
-        src = overrides.get(ind["key"])
+        # a site not yet live is read from the copy of its published data committed here (`snapshot`)
+        src = overrides.get(ind["key"]) or (None if live else str(ROOT / ind["snapshot"]))
         if src:
             raw = Path(src).read_text(encoding="utf-8")
         else:
@@ -150,6 +152,7 @@ class Site:
         for k, fact in self.H["facts"].items():
             self.T[f"history.{k}"] = str(fact["value"])
         self.F = findings(self.data["cafes"])
+        self.JF = findings(self.data["jewellery"]) if "jewellery" in self.data else {}
         self.missing, self.used = [], []
         self.brand, self.au = self.cfg["brand"]["name"], self.cfg["author"]
         self.ind = {i["key"]: i for i in self.cfg["industries"]}
@@ -163,6 +166,9 @@ class Site:
                     raise BuildError(f"findings.{group}: '{fid}' is not in the café index's published findings")
                 if not isinstance(self.F[fid].get("value"), (int, float)):
                     raise BuildError(f"finding '{fid}' has no published value")
+        for fid in self.ind["jewellery"].get("show") or []:
+            if fid not in self.JF:
+                raise BuildError(f"industries.jewellery.show: '{fid}' is not in the jewellery index's published findings")
 
     # ----- words -----
     def f(self, text):
@@ -514,12 +520,20 @@ class Site:
   <div class="t t-plain s12 sec-head rv"><h2 id="q-h">{E(J['questions_headline'])}</h2></div>
   {qs}
 </section>"""
+        tz = ["tone-stone", "tone-blush", "tone-pink"]
+        tiles = "".join(f"""<article class="t t-fig rv s4 {tz[n % 3]}"><p class="fig"><span class="n">{E(num(x['value']))}</span><small>{E(x.get('unit', ''))}</small></p>
+    <div class="fig-foot"><p class="fig-cap">{E(x['headline'])}</p><p class="small"><b>{E(J['how'])}</b> {E(x.get('how', ''))}</p></div></article>"""
+                        for n, x in enumerate(self.JF[fid] for fid in self.ind["jewellery"].get("show") or []))
+        found = f"""<section class="board found" aria-labelledby="found-h">
+  <div class="t t-plain s12 sec-head rv"><h2 id="found-h">{E(J['found_headline'])}</h2><p>{self.f(J['found_lede'])}</p></div>
+  {tiles}
+</section>""" if tiles else ""
         pair = f"""<section class="board pair" aria-label="The trade">
   {self.photo_tile("emerald", "s8", pre, "(max-width: 760px) 100vw, 66vw")}
   {self.photo_tile("badi-chaupar", "s4", pre, "(max-width: 760px) 100vw, 33vw")}
 </section>"""
         close = self.close_row(pre, J["close_headline"], J["close_text"], "../updates/?pick=jewellery", J["action"], "textile-stall", pick="jewellery")
-        return self.page("jewellery/", self.p(J["title"]), self.p(J["description"]), "\n".join([head, questions, pair, close]))
+        return self.page("jewellery/", self.p(J["title"]), self.p(J["description"]), "\n".join([head, questions, found, pair, close]))
 
     def nxt(self):
         pre, N = "../", self.C["next"]

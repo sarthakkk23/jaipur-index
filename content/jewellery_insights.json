@@ -1,0 +1,157 @@
+{
+ "meta": {
+  "captured_on": "2026-10-28",
+  "snapshot": "2026-10-28"
+ },
+ "tokens": {
+  "findings": "12"
+ },
+ "insights": {
+  "findings": [
+   {
+    "id": "1.1",
+    "chapter": "The city that makes gold",
+    "value": "59.5",
+    "unit": "%",
+    "headline": "Gold is 59.5% of the export zone's shipments. A decade ago, coloured gemstones were about 46% of the city's exports.",
+    "how": "GJEPC's SEZ booklet, Table 7; GJEPC figures in GIA's 2016 study of Jaipur, Table 1 (cut stones only).",
+    "figures": [
+     "c4_sez_gold_pct",
+     "n26_gemstones_2014_pct"
+    ]
+   },
+   {
+    "id": "1.2",
+    "chapter": "The city that makes gold",
+    "value": "0.3",
+    "unit": "%",
+    "headline": "The Rajasthan region's exports jumped 82%. Gemstones explain about 0.3% of it.",
+    "how": "GJEPC's region tables. \"About\", not \"at most\": the gemstone figure is India's net change, not the region's. GJEPC reports this as the Rajasthan region, so I do too.",
+    "figures": [
+     "c5_region_rise_pct",
+     "c5_gemstone_share_of_rise_pct"
+    ]
+   },
+   {
+    "id": "1.3",
+    "chapter": "The city that makes gold",
+    "value": "+31",
+    "unit": "%",
+    "headline": "Studded gold jewellery exports +31%. Plain gold −8.8%.",
+    "how": "GJEPC's monthly export release (Solitaire, 14 October 2026).",
+    "figures": [
+     "n19_studded_gold_pct",
+     "n19_plain_gold_pct"
+    ]
+   },
+   {
+    "id": "2.1",
+    "chapter": "The tariff year",
+    "value": "60",
+    "unit": "%",
+    "headline": "During the 50% tariff, 60% of America's silver jewellery came from countries other than India, Thailand and China. A year earlier it was 29%.",
+    "how": "UN Comtrade, US imports by country, customs value.",
+    "figures": [
+     "c1_tariff_peak_pct",
+     "c1_silver_others_during_pct",
+     "c1_silver_others_before_pct"
+    ]
+   },
+   {
+    "id": "2.2",
+    "chapter": "The tariff year",
+    "value": "4.4",
+    "unit": "%",
+    "headline": "India's share of America's gold jewellery fell from 26.3% to 4.4%. In March 2026 it turned.",
+    "how": "UN Comtrade, US imports by country. The US code for gold jewellery (HS 711319) also includes platinum jewellery.",
+    "figures": [
+     "c2_gold_india_before_pct",
+     "c2_gold_india_during_pct"
+    ]
+   },
+   {
+    "id": "2.3",
+    "chapter": "The tariff year",
+    "value": "10",
+    "unit": "%",
+    "headline": "Since 24 July 2026, Indian cut gemstones pay a 10% US duty. Before, they paid none.",
+    "how": "USTR's Section 301 final action and its exemption annex.",
+    "figures": [
+     "c13_india_stone_duty_pct"
+    ]
+   },
+   {
+    "id": "3.1",
+    "chapter": "The stone",
+    "value": "9",
+    "unit": "",
+    "headline": "Every commercial-quality emerald auction from the Zambian mine since 2022 was viewed only in Jaipur: 9 of 9.",
+    "how": "Gemfields' auction announcements, 2009-2026. Viewed, not sold: bidding is online.",
+    "figures": [
+     "c10_cq_auctions_jaipur",
+     "c10_cq_auctions_since_2022"
+    ]
+   },
+   {
+    "id": "3.2",
+    "chapter": "The stone",
+    "value": "US$9.72",
+    "unit": "",
+    "headline": "Commercial-quality emerald rough reached US$9.72 a carat, up 117% in two years.",
+    "how": "Gemfields' auction announcements. Gemfields warns that results aren't always directly comparable between auctions.",
+    "figures": [
+     "c9_cq_usd_ct",
+     "c9_cq_two_year_pct"
+    ]
+   },
+   {
+    "id": "4.1",
+    "chapter": "Silver, the quiet leader",
+    "value": "11",
+    "unit": "%",
+    "headline": "Rajasthan holds 11% of India's hallmarking licences for silver jewellers, with 5.9% of its people.",
+    "how": "A Rajya Sabha answer listing BIS licences by state (19 August 2025); population projections for 1 July 2025. The lead over Maharashtra is small and the count has grown since, so this is dated, not current.",
+    "figures": [
+     "c15_rj_silver_share_pct",
+     "c15_rj_population_pct"
+    ]
+   },
+   {
+    "id": "5.1",
+    "chapter": "The season ahead",
+    "value": "11",
+    "unit": "",
+    "headline": "This November-December has 11 wedding dates, against 17 last year. January-February has 22, against 12.",
+    "how": "Drik Panchang, set to Jaipur. Published lists differ on how many dates a season has, so I use one named source.",
+    "figures": [
+     "c18_novdec_2026_dates",
+     "c18_novdec_2025_dates",
+     "c18_janfeb_2027_dates",
+     "c18_janfeb_2026_dates"
+    ]
+   },
+   {
+    "id": "5.2",
+    "chapter": "The season ahead",
+    "value": "53",
+    "unit": "%",
+    "headline": "At Dhanteras 2025, ₹1 lakh bought 53% less gold than two Dhanterases before.",
+    "how": "IBJA's 999 rate, before GST and making charges. For 2025 it's the Friday close before a Saturday Dhanteras.",
+    "figures": [
+     "c20_less_gold_pct"
+    ]
+   },
+   {
+    "id": "5.3",
+    "chapter": "The season ahead",
+    "value": "6",
+    "unit": "times",
+    "headline": "November brings about 6 times as many foreign visits to Rajasthan as June.",
+    "how": "Rajasthan Tourism's annual progress reports, monthly tables. These are visits, not tourists (one person seeing two cities counts twice), and state figures, not Jaipur's.",
+    "figures": [
+     "n8_nov_over_jun"
+    ]
+   }
+  ]
+ }
+}
