@@ -177,7 +177,7 @@ class Site:
         for part in re.split(r"({{\s*[\w.]+\s*}})", " ".join(str(text).split())):
             m = re.fullmatch(r"{{\s*([\w.]+)\s*}}", part)
             if not m:
-                out.append(re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", E(part)))
+                out.append(re.sub(r"(?<!\*)\*(?!\*)(.+?)\*", r"<em>\1</em>", re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", E(part))))
             elif self.T.get(m.group(1)) in (None, "", "—"):
                 self.missing.append(m.group(1))
                 out.append("—")
@@ -348,18 +348,26 @@ class Site:
         pre, H = "", self.C["home"]
         src = self.H["source"]
 
-        # ----- the first screen: an honest way out, then the city's story -----
-        Y = H["hurry"]
-        hrefs = {"cafe": f"{self.cafe}/", "jewel": f"{self.jewel}/"}
-        links = "".join(f'<a href="{hrefs.get(h, h)}">{E(t)}</a>' for h, t in Y["links"])
-        hurry = f"""<div class="hurry"><p class="hurry-text">{self.f(Y['text'])}</p><nav class="hurry-links" aria-label="Skip to">{links}</nav>
-    <p class="hurry-after"><a href="#story">{self.f(Y['after'])}</a></p></div>"""
+        # ----- the first screen: the promise, the two indexes, three live figures, and an honest way down -----
         V = H["hero"]
-        hero = f"""<section class="board story-head" aria-labelledby="hero-h">
-  <div class="t tone-clay s7 story rv"><h1 id="hero-h">{E(V['headline'])}</h1>
-    {hurry}</div>
-  {self.photo_tile("pink-bazaar", "s5 story-pic", pre, "(max-width: 900px) 100vw, 42vw", eager=True)}
+        hrefs = {"cafe": f"{self.cafe}/", "jewel": f"{self.jewel}/"}
+        acts = "".join(f'<a class="btn {"btn-accent" if n == 0 else "btn-ink"}" href="{hrefs.get(h, h)}">{E(t)}</a>' for n, (h, t) in enumerate(V["actions"]))
+        figs = "".join(f'<li><span class="hx-n">{self.f(n)}</span><span class="hx-l">{E(l)}</span></li>' for n, l in V["figures"])
+        lines = "".join(f'<span class="hx-line" style="--i:{k}"><span>{self.f(t)}</span></span>' for k, t in enumerate(V["lines"]))
+        hero = f"""<section class="board hx" aria-labelledby="hero-h">
+  <div class="t tone-paper s7 hx-copy">
+    <p class="hx-kicker">{E(V['kicker'])}</p>
+    <h1 id="hero-h" class="hx-title" aria-label="{E(V['headline'])}">{lines}</h1>
+    <p class="hx-sub">{self.f(V['sub'])}</p>
+    <p class="hx-acts">{acts}</p>
+    <ul class="hx-figs">{figs}</ul>
+    <p class="hx-skip">{self.f(V['skip'])} <a href="#story">{E(V['skip_go'])}</a></p>
+  </div>
+  {self.photo_tile("pink-bazaar", "s5 hx-pic", pre, "(max-width: 900px) 100vw, 42vw", eager=True)}
 </section>"""
+        items = "".join(f'<span>{self.f(t)}</span>' for t in V["ticker"])
+        ticker = f"""<div class="hx-ticker" aria-hidden="true"><div class="hx-track">{items}{items}</div></div>"""
+        hero += ticker
 
         # ----- the story: one moment at a time, turned by the reader (all four are in the page without script) -----
         S = H["history"]

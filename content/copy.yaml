@@ -24,16 +24,29 @@ home:
     Jaipur was built to trade. Free, independent data for anyone who runs or plans to start a business here: the
     Jaipur Café Index is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month, and the Jaipur
     Jewellery Index follows the jewellery trade each month.
-  hurry:
-    text: "I'll be straight with you: this page is the long way round. If you already know what you're after, skip to it."
-    links:
-      - ["cafe", "Café data: the Café Index"]
-      - ["jewel", "Jewellery data: the Jewellery Index"]
-      - ["updates/", "Free updates on WhatsApp"]
-      - ["updates/#ask", "Ask me a question"]
-    after: "Otherwise, start with the city. It's a good story, and it's short."
   hero:
     headline: "Jaipur was built to trade."
+    kicker: "Independent research on Jaipur's businesses"
+    lines: ["Jaipur was", "built to *trade.*"]
+    sub: "Free, checked data on what's really happening in the city's trades. Cafés and jewellery so far, with more to come."
+    actions:
+      - ["cafe", "The Café Index"]
+      - ["jewel", "The Jewellery Index"]
+    figures:
+      - ["{{cafes.scene.core_cafes}}", "cafés measured"]
+      - ["{{cafes.findings}}", "café findings"]
+      - ["{{jewellery.findings}}", "jewellery findings"]
+    skip: "Or take the long way round: the city's story first, then your trade."
+    skip_go: "Start with the city"
+    ticker:
+      - "{{cafes.scene.core_cafes}} cafés measured"
+      - "C-Scheme and Malviya Nagar"
+      - "{{cafes.findings}} café findings"
+      - "Re-measured every two weeks"
+      - "{{jewellery.findings}} jewellery findings"
+      - "Exports, tariffs, emeralds, gold"
+      - "Every figure checked twice"
+      - "Free. Nothing for sale"
   history:
     headline: "How Jaipur was built to trade."
     hint: "Four moments. Turn the page and watch the city go up."
