@@ -73,7 +73,7 @@ Until this is done, the form still works: "Send" opens the visitor's email app w
 1. In Google Forms, create a form called "Jaipur Index: updates" with four questions, in this order:
    - **Your name**: short answer, required
    - **WhatsApp number**: short answer, required
-   - **Send me**: checkboxes, required, with exactly these options: `Cafés`, `Jewellery, when it launches`,
+   - **Send me**: checkboxes, required, with exactly these options: `Cafés`, `Jewellery`,
      `The next industry`
    - **What do you wish you knew about your industry?**: paragraph, optional
 2. Under Responses, link it to a new Google Sheet.

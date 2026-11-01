@@ -64,6 +64,28 @@
     show(0, 0);
   }
 
+  // ---------- jewellery: one finding at a time, then an offer to read the rest ----------
+  const jf = document.querySelector("[data-jf]");
+  if (jf) {
+    const cards = [...jf.querySelectorAll(".jf-card")], marks = [...jf.querySelectorAll(".jf-marks i")];
+    const nav = jf.querySelector(".jf-nav"), end = jf.querySelector(".jf-end"), again = jf.querySelector(".jf-again");
+    let at = 0;
+    const show = (n, scroll) => {
+      at = n;
+      const done = n >= cards.length;
+      cards.forEach((c, i) => { c.hidden = i !== n; c.classList.toggle("in", i === n); });
+      marks.forEach((m, i) => { m.classList.toggle("now", i === n); m.classList.toggle("done", i < n); });
+      end.hidden = !done; end.classList.toggle("in", done);
+      nav.hidden = done; again.hidden = !done;
+      if (scroll) jf.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+    };
+    jf.querySelector(".jf-next").addEventListener("click", () => show(at + 1, true));
+    again.addEventListener("click", () => show(0, true));
+    jf.querySelector(".jf-marks").hidden = false;
+    jf.classList.add("jf-on");
+    show(0, false);
+  }
+
   // ---------- guess first: the reader guesses, then sees the real figure ----------
   const game = document.querySelector(".guess");
   if (game) {
