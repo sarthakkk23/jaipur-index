@@ -14,7 +14,6 @@
 nav:
   - ["cafes/", "Cafés"]
   - ["jewellery/", "Jewellery"]
-  - ["next/", "What's next"]
   - ["about/", "About"]
 nav_action: ["updates/", "Get updates"]
 
@@ -67,10 +66,6 @@ home:
       {{jewellery.findings}} findings from public records: exports, the US tariff, the emerald trade, and what they
       mean for makers and shops at home. Plus an owner's playbook, and the figures that moved this month.
     jewellery_go: "Open the Jewellery Index"
-    candidate_head: "Not measured yet."
-    candidate_text: >-
-      It's on the list for after jewellery. Votes decide which comes first, and yours counts.
-    candidate_go: "Vote for it"
     other_head: "Something else?"
     other_text: >-
       Tell me your trade and the question you'd most like answered about it. The best questions shape what I
@@ -104,6 +99,8 @@ cafes:
     {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, counted, compared and re-measured every two
     weeks. Every figure is an aggregate, with its source and its date.
   action: "Open the Café Index"
+  act_num: "{{cafes.scene.core_cafes}}"
+  act_cap: "cafés measured across C-Scheme and Malviya Nagar."
   updated: "Updated {{cafes.updated}}. Re-measured every two weeks."
   inside_word: "Inside"
   inside:
@@ -155,6 +152,8 @@ jewellery:
     Jaipur cuts, sets and ships jewellery to the world. What's happening to that trade is in public data, buried in
     customs tables and trade reports. I dug through them, checked every figure, and put them in one place.
   action: "Open the Jewellery Index"
+  act_num: "{{jewellery.findings}}"
+  act_cap: "findings from public records, each checked and sourced."
   note: "Free. Figures updated each month. Nothing for sale."
   questions_headline: "What it answers."
   questions:
@@ -163,35 +162,16 @@ jewellery:
     - ["Plain gold or studded, silver or coloured stones: which exports are growing, and which are shrinking?", "For gold makers and exporters"]
     - ["What do the wedding season, metal prices and visitors mean for shops at home?", "For shops in the city"]
   found_headline: "What it's found so far."
-  found_lede: "A few of the {{jewellery.findings}} findings, each read from a public record and checked by separate code. The rest, with their charts, are on the Jewellery Index."
-  how: "How I know:"
+  found_lede: "Three of them, one at a time. Each is read from a public record and checked by separate code."
+  how: "How I know"
   more: "Read it in full"
+  next: "Next finding"
+  end_text: "That's three of the {{jewellery.findings}}. The rest, with their charts, are on the Jewellery Index. Want to see them?"
+  end_go: "Yes, take me there"
+  again: "Start again"
   close_headline: "Get it each month."
   close_text: "Leave your WhatsApp number and you'll hear when the jewellery figures update. Nothing else, nothing for sale."
   close_action: "Get the monthly update"
-
-# ---------------------------------------------------------------- next
-next:
-  title: "What's next · The industries {{brand}} could measure after jewellery"
-  description: >-
-    Textiles and block printing, handicrafts, hotels: the Jaipur industries that could be measured next, how the
-    next one is chosen, and how to vote for yours.
-  headline: "Your industry could be next."
-  statement: >-
-    Cafés came first and jewellery second. What follows isn't decided yet, and the people who run these
-    businesses get a say.
-  tests_headline: "Two tests decide it."
-  tests:
-    - "**Is there public data?** If the numbers aren't published anywhere, I can't measure the market honestly, however interesting it is."
-    - "**Do I know people in it?** Data says what is happening; owners say why. Every index needs both."
-  candidates:
-    textiles: "The printers of Sanganer and Bagru, the wholesalers and the shops: what sells, where, and who's buying."
-    handicrafts: "Puppets, pottery, brass and stone: which crafts are growing, and how they reach their buyers."
-    hotels: "Havelis, heritage stays and budget rooms: what guests reward, and where the gaps are."
-  vote: "Vote for this"
-  other_headline: "Something else?"
-  other_text: "Tell me your trade and what you'd want to know about it."
-  other_go: "Suggest one"
 
 # ---------------------------------------------------------------- about
 about:

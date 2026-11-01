@@ -39,7 +39,7 @@ industries:
     subdomain: jewellery
     now_url: "https://sarthakkk23.github.io/jaipur-jewellery-index"
     data: "data/insights.json"
-    show: ["1.1", "2.1", "2.2", "3.2", "5.1", "5.3"]   # the findings on the Jewellery page, by id
+    show: ["2.2", "3.2", "5.1"]   # the findings on the Jewellery page, one at a time, by id
   - key: textiles
     short: "Textiles and block printing"
     status: candidate

@@ -209,7 +209,7 @@ html:not(.js) .story-hint { display: none; }
 .trade:active { transform: scale(.985); }
 .trade-name { font-size: var(--t3); letter-spacing: -0.015em; line-height: 1.12; }
 .trade-tag { font-size: var(--t5); font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
-.tone-pink .trade-tag::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
+.trade-live .trade-tag::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
 .trade[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 @media (hover: hover) and (pointer: fine) { .trade:not([aria-pressed="true"]):hover { background: var(--pink); } }
 .answer { min-height: 300px; padding: clamp(24px, 3vw, 44px); }
@@ -268,7 +268,9 @@ html:not(.js) .answer { display: none; }
 /* ---------- page heads ---------- */
 .p-head .name { min-height: clamp(240px, 46vh, 520px); }
 .name h1 { font-size: var(--t1); line-height: .92; letter-spacing: -0.045em; max-width: 11ch; }
-.p-head .act { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 14px; }
+.p-head .act { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 32px; }
+.p-head .act-go { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.p-head .act-cap { font-size: var(--t4); line-height: 1.35; margin-top: 14px; max-width: 22ch; }
 .p-head .r2 { min-height: 520px; }
 .p-head .t-plain { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
 @media (max-width: 900px) { .p-head .name { min-height: 0; padding-top: 48px; padding-bottom: 32px; } .p-head .r2 { min-height: 70vw; } }
@@ -451,3 +453,31 @@ html:not(.js) .gq-ask, html:not(.js) .gq-reveal { min-height: 0; }
   .bar { gap: 8px; } .bar-btn { padding: 0 10px; } .menu summary { padding: 0 10px; }
   h2 { font-size: 1.4rem; }
 }
+
+/* ---------- jewellery: one finding at a time ---------- */
+.jf { display: grid; gap: 12px; padding: 0; background: none; }
+.jf-marks { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
+.jf-marks[hidden], .jf-nav[hidden], .jf-end[hidden], .jf-card[hidden] { display: none; }
+.jf-marks i { height: 8px; background: var(--ink); opacity: .15; transition: opacity .3s ease, background-color .3s ease; }
+.jf-marks i.done { opacity: .55; }
+.jf-marks i.now { opacity: 1; background: var(--red); }
+.jf-cards { display: grid; gap: var(--gap); }
+.jf-card { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px clamp(24px, 4vw, 64px); align-items: end;
+  min-height: 380px; padding: clamp(24px, 3.5vw, 52px); }
+.jf-fig { font-size: clamp(4rem, 2.4rem + 7vw, 9rem); }
+.jf-head { font-size: clamp(1.3rem, 1rem + 1vw, 2.1rem); line-height: 1.2; letter-spacing: -0.015em; max-width: 26ch; }
+.jf-how { margin-top: 18px; font-size: var(--t5); max-width: 52ch; }
+.jf-how summary { cursor: pointer; font-weight: 600; list-style: none; display: inline-flex; gap: 8px; min-height: 32px; align-items: center; }
+.jf-how summary::-webkit-details-marker { display: none; }
+.jf-how summary::after { content: "+"; font-weight: 400; }
+.jf-how[open] summary::after { content: "−"; }
+.jf-how p { margin-top: 6px; line-height: 1.5; }
+.jf-end { display: grid; gap: 20px; align-content: center; min-height: 300px; padding: clamp(28px, 4vw, 56px); }
+.jf-say { font-size: var(--t2); line-height: 1.15; letter-spacing: -0.02em; max-width: 26ch; }
+.jf-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.jf-nav { display: flex; justify-content: flex-end; }
+.jf-on .jf-card.in { animation: jf-in .55s var(--ease) both; }
+.jf-on .jf-end.in { animation: jf-in .55s var(--ease) both; }
+@keyframes jf-in { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .jf-on .jf-card.in, .jf-on .jf-end.in { animation: none; } }
+@media (max-width: 760px) { .jf-card { grid-template-columns: 1fr; min-height: 0; align-items: start; } .jf-nav .btn { width: 100%; } }
