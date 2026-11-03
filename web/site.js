@@ -1,4 +1,4 @@
-// Jaipur Index. Progressive enhancement only: every page is complete without this file.
+// Pink City Papers. Progressive enhancement only: every page is complete without this file.
 (() => {
   window.__board = true;
   const root = document.documentElement;
