@@ -1,4 +1,4 @@
-/* Jaipur Index: the board.
+/* Pink City Papers: the board.
    Jaipur was laid out as a grid, its avenues designed as markets; every page here is a 12-column grid of flat tiles,
    fitted edge to edge with narrow gaps, each tile one thing. From the café index it takes only its sense: the
    Literata face, the Pink City colours, flat colour with no lines or shadows, and calm motion. */
@@ -68,7 +68,6 @@ b { font-weight: 600; }
 .bar { position: sticky; top: 0; z-index: 30; height: var(--bar); display: flex; align-items: center; gap: clamp(16px, 3vw, 40px);
   padding: 0 var(--edge); background: var(--paper); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; }
-.mark { width: 28px; height: 28px; flex: none; }
 .bar-links { display: flex; gap: clamp(14px, 2.2vw, 30px); margin-left: auto; font-size: .9375rem; }
 .bar-links a { text-decoration: none; color: var(--soft); padding: 8px 0; transition: color .2s ease; }
 .bar-links a:hover, .bar-links a[aria-current] { color: var(--ink); }

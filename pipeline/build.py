@@ -1,7 +1,7 @@
 """Build the main site: config + copy + each live industry's published data + web/ -> dist/ (static, no framework).
 
 Six pages, one board: every page is a 12-column grid of flat tiles fitted edge to edge, the way Jaipur's walled city
-is a grid of blocks with a bazaar for each trade. Same fonts and colours as the café index; none of its layouts.
+is a grid of blocks with a bazaar for each trade. Same fonts and colours as the café site; none of its layouts.
 
 Numbers are never typed into the copy. They come from each live industry site's published aggregates
 (for cafés: <café site>/data/insights.json), read at build time, so the front door always matches the industry
@@ -146,7 +146,7 @@ class Site:
         self.dom, self.base = addresses(self.cfg)
         self.data = load_data(self.cfg, overrides)
         if "cafes" not in self.data:
-            raise BuildError("the café index is the proof on this site; its data is required")
+            raise BuildError("the café site is the proof on this site; its data is required")
         self.T = tokens(self.cfg, self.data)
         self.H = yaml.safe_load((ROOT / "content" / "history.yaml").read_text(encoding="utf-8"))
         for k, fact in self.H["facts"].items():
@@ -163,12 +163,12 @@ class Site:
         for group, ids in self.cfg["findings"].items():
             for fid in ids:
                 if fid not in self.F:
-                    raise BuildError(f"findings.{group}: '{fid}' is not in the café index's published findings")
+                    raise BuildError(f"findings.{group}: '{fid}' is not in the café site's published findings")
                 if not isinstance(self.F[fid].get("value"), (int, float)):
                     raise BuildError(f"finding '{fid}' has no published value")
         for fid in self.ind["jewellery"].get("show") or []:
             if fid not in self.JF:
-                raise BuildError(f"industries.jewellery.show: '{fid}' is not in the jewellery index's published findings")
+                raise BuildError(f"industries.jewellery.show: '{fid}' is not in the jewellery site's published findings")
 
     # ----- words -----
     def f(self, text):
@@ -264,10 +264,7 @@ class Site:
         home = pre or "./"
         links = "".join(f'<a href="{pre}{h}"{CURRENT if h == path else ""}>{E(t)}</a>' for h, t in self.C["nav"])
         ah, at = self.C["nav_action"]
-        mark = ('<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#e3ad9f"/>'
-                '<rect x="14" y="30" width="9" height="20" fill="#161616"/><rect x="27.5" y="20" width="9" height="30" fill="#161616"/>'
-                '<rect x="41" y="13" width="9" height="37" fill="#b0533d"/></svg>')
-        return (f'<header class="bar"><a class="wordmark" href="{home}">{mark}<span>{E(self.brand)}</span></a>'
+        return (f'<header class="bar"><a class="wordmark" href="{home}"><span>{E(self.brand)}</span></a>'
                 f'<nav class="bar-links" aria-label="Main">{links}</nav>'
                 f'<details class="menu"><summary>Menu</summary><nav class="menu-panel" aria-label="Main"><a href="{home}">Home</a>{links}'
                 f'<a href="{pre}{ah}">{E(at)}</a></nav></details>'
@@ -299,12 +296,12 @@ class Site:
   <a class="blocks" href="{pre or './'}" aria-label="{E(self.brand)}: home">{''.join(blocks)}</a>
   <div class="ft-cols">
     <div><p class="ft-h">{E(Fo['industries'])}</p>{inds}</div>
-    <div><p class="ft-h">{E(Fo['project'])}</p><a href="{pre}about/">About</a><a href="{pre}about/#method">How it's made</a><a href="https://github.com/sarthakkk23/jaipur-index" rel="noopener">Source code</a></div>
+    <div><p class="ft-h">{E(Fo['project'])}</p><a href="{pre}about/">About</a><a href="{pre}about/#method">How it's made</a><a href="https://github.com/sarthakkk23/pink-city-papers" rel="noopener">Source code</a></div>
     <div><p class="ft-h">{E(Fo['stay'])}</p><a href="{pre}updates/">Free updates</a><a href="{mail}">Email</a><a href="{self.au['linkedin']}" rel="noopener">LinkedIn</a></div>
     <div class="ft-note"><p>{self.f(Fo['note'])}</p></div>
   </div>
   {credit_line}
-  <p class="ft-small">Café figures from the Jaipur Café Index, updated {E(self.T['cafes.updated'])} · built {E(nice(self.today))}</p>
+  <p class="ft-small">Café figures from The Café Paper, updated {E(self.T['cafes.updated'])} · built {E(nice(self.today))}</p>
 </footer>"""
 
     def page(self, path, title, desc, body, ld_extra=None, main_cls="", not_found=False):
@@ -348,7 +345,7 @@ class Site:
         pre, H = "", self.C["home"]
         src = self.H["source"]
 
-        # ----- the first screen: the promise, the two indexes, three live figures, and an honest way down -----
+        # ----- the first screen: the promise, the two papers, three live figures, and an honest way down -----
         V = H["hero"]
         hrefs = {"cafe": f"{self.cafe}/", "jewel": f"{self.jewel}/"}
         acts = "".join(f'<a class="btn {"btn-accent" if n == 0 else "btn-ink"}" href="{hrefs.get(h, h)}">{E(t)}</a>' for n, (h, t) in enumerate(V["actions"]))

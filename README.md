@@ -1,10 +1,10 @@
-# Jaipur Index (working name)
+# Pink City Papers (working name)
 
 The main website for Sarthak Oberoi's Jaipur industry research: the front door that links to every industry site.
 In the wider project folder, read `../GAMEPLAN.md` first.
 
-**Live industry:** [Jaipur Café Index](https://sarthakkk23.github.io/jaipur-cafe-pulse/) · **Next:** jewellery ·
-**Preview:** https://sarthakkk23.github.io/jaipur-index/
+**Live industry:** [The Café Paper](https://sarthakkk23.github.io/cafe-paper/) · **Next:** jewellery ·
+**Preview:** https://sarthakkk23.github.io/pink-city-papers/
 
 ## Its job
 
@@ -70,7 +70,7 @@ the brand is the line above it, `brand.name`.
 
 Until this is done, the form still works: "Send" opens the visitor's email app with their details addressed to you.
 
-1. In Google Forms, create a form called "Jaipur Index: updates" with four questions, in this order:
+1. In Google Forms, create a form called "Pink City Papers: updates" with four questions, in this order:
    - **Your name**: short answer, required
    - **WhatsApp number**: short answer, required
    - **Send me**: checkboxes, required, with exactly these options: `Cafés`, `Jewellery`,
