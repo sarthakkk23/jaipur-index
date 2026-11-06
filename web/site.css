@@ -48,20 +48,23 @@ b { font-weight: 600; }
 .tone-clay { background: var(--clay); color: var(--paper); }
 .tone-ink { background: var(--ink); color: var(--paper); }
 
-/* ---------- buttons: square, one fill ---------- */
+/* ---------- buttons: square, one fill; on hover the second colour sweeps in from the left ---------- */
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border: 0; border-radius: 0;
   background: var(--ink); color: var(--paper); font: 600 .9375rem/1.2 "Literata", Georgia, serif; text-decoration: none; cursor: pointer;
-  transition: background-color .2s ease, color .2s ease, transform .15s var(--ease); }
+  position: relative; isolation: isolate; overflow: hidden; --hv: var(--red); --hc: var(--paper);
+  transition: color .3s ease, transform .15s var(--ease), translate .5s var(--ease); }
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--hv); transform: scaleX(0); transform-origin: right center;
+  transition: transform .5s var(--ease); }
 .btn:active { transform: scale(.97); }
-.btn-accent { background: var(--red); color: var(--paper); }
-.btn-paper { background: var(--paper); color: var(--ink); }
-.btn-quiet { background: var(--stone-2); color: var(--ink); }
+.btn-accent { background: var(--red); color: var(--paper); --hv: var(--ink); }
+.btn-paper { background: var(--paper); color: var(--ink); --hv: var(--pink); --hc: var(--ink); }
+.btn-quiet { background: var(--stone-2); color: var(--ink); --hv: var(--pink); --hc: var(--ink); }
+.t-accent .btn-paper, .tone-red .btn-paper { --hv: var(--ink); --hc: var(--paper); }
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover { background: var(--red); color: var(--paper); }
-  .btn-accent:hover, .t-accent .btn-paper:hover, .tone-red .btn-paper:hover { background: var(--ink); color: var(--paper); }
-  .btn-paper:hover { background: var(--pink); color: var(--ink); }
-  .btn-quiet:hover { background: var(--pink); color: var(--ink); }
+  .btn:not([disabled]):hover { color: var(--hc); }
+  .btn:not([disabled]):hover::before { transform: scaleX(1); transform-origin: left center; }
 }
+@media (prefers-reduced-motion: reduce) { .btn::before { transition: none; } }
 .link { text-decoration-color: currentColor; }
 
 /* ---------- bar: wordmark, four links, one action ---------- */
@@ -69,9 +72,9 @@ b { font-weight: 600; }
   padding: 0 var(--edge); background: var(--paper); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; }
 .bar-links { display: flex; gap: clamp(14px, 2.2vw, 30px); margin-left: auto; font-size: .9375rem; }
-.bar-links a { text-decoration: none; color: var(--soft); padding: 8px 0; transition: color .2s ease; }
-.bar-links a:hover, .bar-links a[aria-current] { color: var(--ink); }
-.bar-links a[aria-current] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .45em; }
+.bar-links a { text-decoration: none; color: var(--soft); padding: 8px 0; transition: color .2s ease, background-size .4s var(--ease);
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 2px; }
+.bar-links a:hover, .bar-links a[aria-current] { color: var(--ink); background-size: 100% 2px; }
 .bar-btn { min-height: 44px; white-space: nowrap; flex: none; }
 .menu { display: none; margin-left: auto; }
 .menu summary { list-style: none; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; background: var(--stone); font-weight: 600; font-size: .9375rem; }
@@ -113,8 +116,7 @@ main > :last-child { padding-bottom: var(--gap); }
 .hx-title em { font-style: italic; color: var(--red); letter-spacing: -0.03em; }
 .hx-sub { font-size: var(--t3); line-height: 1.3; max-width: 34ch; color: var(--ink); text-wrap: pretty; }
 .hx-acts { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn-ink { background: var(--ink); color: var(--paper); }
-@media (hover: hover) and (pointer: fine) { .btn-ink:hover { background: var(--clay); } }
+.btn-ink { background: var(--ink); color: var(--paper); --hv: var(--clay); }
 .hx-figs { list-style: none; margin: 0; padding: 18px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, max-content)); gap: clamp(20px, 3.5vw, 56px);
   border-top: 1px solid rgba(22, 22, 22, .14); }
 .hx-figs li { display: grid; gap: 4px; align-content: start; }
@@ -129,10 +131,13 @@ main > :last-child { padding-bottom: var(--gap); }
 .hx-track > span { white-space: nowrap; font-size: .9375rem; padding: 0 22px; }
 .hx-track > span::after { content: "✦"; margin-left: 44px; color: var(--pink); font-size: .7em; vertical-align: .15em; }
 @media (prefers-reduced-motion: no-preference) {
-  .js .hx-line > span { transform: translateY(105%); animation: hx-rise 1.1s var(--ease) both; animation-delay: calc(.12s + var(--i) * .14s); }
-  .js .hx-kicker, .js .hx-sub, .js .hx-acts, .js .hx-figs, .js .hx-skip { animation: hx-fade .9s var(--ease) both; }
-  .js .hx-sub { animation-delay: .45s; } .js .hx-acts { animation-delay: .55s; } .js .hx-figs { animation-delay: .7s; } .js .hx-skip { animation-delay: .85s; }
-  .js .hx-pic img { animation: hx-zoom 14s cubic-bezier(.2, .6, .2, 1) both; }
+  .hx { --d0: 0s; }
+  .js:not(.seen) .hx { --d0: 1.15s; }          /* the first visit waits for the curtain to lift */
+  .js .hx-line > span { transform: translateY(105%); animation: hx-rise 1.1s var(--ease) both; animation-delay: calc(var(--d0) + .12s + var(--i) * .14s); }
+  .js .hx-kicker, .js .hx-sub, .js .hx-acts, .js .hx-figs, .js .hx-skip { animation: hx-fade .9s var(--ease) both; animation-delay: var(--d0); }
+  .js .hx-sub { animation-delay: calc(var(--d0) + .45s); } .js .hx-acts { animation-delay: calc(var(--d0) + .55s); }
+  .js .hx-figs { animation-delay: calc(var(--d0) + .7s); } .js .hx-skip { animation-delay: calc(var(--d0) + .85s); }
+  .js .hx-pic img { animation: hx-zoom 14s cubic-bezier(.2, .6, .2, 1) both; animation-delay: calc(var(--d0) * .6); }
   .hx-track { animation: hx-tick 60s linear infinite; }
   .hx-ticker:hover .hx-track { animation-play-state: paused; }
 }
@@ -479,8 +484,8 @@ html:not(.js) .gq-ask, html:not(.js) .gq-reveal { min-height: 0; }
 }
 
 .intro h2 { margin-bottom: 28px; max-width: 24ch; }
-@media (max-width: 340px) {            /* the smallest phones: the mark alone carries the name in the bar */
-  .wordmark span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 340px) {            /* the smallest phones: a smaller name, tighter bar */
+  .wordmark span { font-size: .8125rem; }
   .bar { gap: 8px; } .bar-btn { padding: 0 10px; } .menu summary { padding: 0 10px; }
   h2 { font-size: 1.4rem; }
 }
@@ -512,3 +517,52 @@ html:not(.js) .gq-ask, html:not(.js) .gq-reveal { min-height: 0; }
 @keyframes jf-in { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .jf-on .jf-card.in, .jf-on .jf-end.in { animation: none; } }
 @media (max-width: 760px) { .jf-card { grid-template-columns: 1fr; min-height: 0; align-items: start; } .jf-nav .btn { width: 100%; } }
+
+/* ---------- motion, second pass: the curtain once, words that rise, figures that count, a thread that reads with you ---------- */
+.curtain { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  /* the first page of a visit: the name rises on ink, then the curtain lifts. It never blocks a click. */
+  .js:not(.seen) .curtain { display: flex; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center;
+    background: var(--ink); color: var(--pink); pointer-events: none; animation: cur-lift .8s var(--ease-io) 1s both; }
+  .cur-name { display: flex; max-width: none; overflow: hidden; padding-bottom: .12em; font-size: clamp(2rem, 1rem + 4vw, 4.5rem); font-weight: 500; letter-spacing: -0.04em; }
+  .cur-name span { display: inline-block; white-space: pre; animation: cur-in .7s var(--ease) both; animation-delay: calc(.05s + var(--c) * 28ms); }
+
+  /* headings rise word by word as they come into view (site.js splits them) */
+  .split .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .16em; margin-bottom: -.16em; }
+  .split .w > span { display: inline-block; transform: translateY(112%); transition: transform .95s var(--ease); transition-delay: calc(var(--k) * 45ms); }
+  .split.in .w > span { transform: none; }
+
+  /* the name in the footer builds itself, block by block */
+  .js .blocks .blk { transform: scaleY(0); transform-origin: 50% 100%; transition: transform .9s var(--ease), height .5s var(--ease);
+    transition-delay: calc(var(--j, 0) * 35ms); }
+  .js .blocks.in .blk { transform: none; }
+
+  /* moving between pages: the old page lifts away, the new one settles in; the bar stays put */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: vt-out .3s var(--ease-io) both; }
+  ::view-transition-new(root) { animation: vt-in .55s var(--ease) both; }
+  .bar { view-transition-name: bar; }
+}
+@keyframes cur-lift { to { transform: translateY(-100%); } }
+@keyframes cur-in { from { transform: translateY(112%); } }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-10px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+
+/* the bar steps aside while you read down, and comes back the moment you scroll up */
+.bar { transition: transform .45s var(--ease); }
+.bar.tuck:not(:focus-within) { transform: translateY(-100%); }
+
+/* links in running text: a quiet underline that firms up on hover */
+main p a:not(.btn) { text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color .25s ease, text-decoration-thickness .25s ease; }
+@media (hover: hover) and (pointer: fine) { main p a:not(.btn):hover { text-decoration-color: currentColor; text-decoration-thickness: .12em; } }
+
+/* scroll-linked, where the browser can: a reading thread along the top, and photographs that drift as they pass */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; background: var(--red);
+      transform-origin: 0 50%; transform: scaleX(0); animation: thread linear both; animation-timeline: scroll(root); }
+    .t-photo picture { scale: 1.1; animation: drift linear both; animation-timeline: view(); }
+  }
+}
+@keyframes thread { to { transform: scaleX(1); } }
+@keyframes drift { from { translate: 0 -4%; } to { translate: 0 4%; } }

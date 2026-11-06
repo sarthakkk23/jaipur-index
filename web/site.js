@@ -4,24 +4,108 @@
   const root = document.documentElement;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ---------- entrances: tiles rise in, a board at a time, staggered by position; never a gate ----------
-  const tiles = [...document.querySelectorAll(".rv")];
-  const showAll = () => tiles.forEach((t) => t.classList.add("in"));
-  if (!reduce && "IntersectionObserver" in window) {
+  // ---------- watch: run once when an element comes into view. If the observer never reports, show everything; never a gate ----------
+  const watch = (els, onIn, margin = "0px 0px -6% 0px") => {
+    if (!els.length) return;
+    if (reduce || !("IntersectionObserver" in window)) { els.forEach(onIn); return; }
     let alive = false;
-    setTimeout(() => { if (!alive) showAll(); }, 2000);
+    setTimeout(() => { if (!alive) els.forEach(onIn); }, 2000);
     const io = new IntersectionObserver((es) => {
       alive = true;
-      es.forEach((e) => {
-        if (!e.isIntersecting) return;
-        const t = e.target, sib = [...(t.parentElement?.children || [])];
-        t.style.transitionDelay = `${Math.min(6, Math.max(0, sib.indexOf(t))) * 75}ms`;
-        t.classList.add("in");
-        io.unobserve(t);
+      es.forEach((e) => { if (e.isIntersecting) { onIn(e.target); io.unobserve(e.target); } });
+    }, { rootMargin: margin });
+    els.forEach((t) => io.observe(t));
+  };
+
+  // ---------- entrances: tiles rise in, a board at a time, staggered by position ----------
+  watch([...document.querySelectorAll(".rv")], (t) => {
+    const sib = [...(t.parentElement?.children || [])];
+    t.style.transitionDelay = `${Math.min(6, Math.max(0, sib.indexOf(t))) * 75}ms`;
+    t.classList.add("in");
+  });
+
+  // ---------- headings rise word by word: each word in a clipped span, the text itself unchanged ----------
+  if (!reduce) {
+    const heads = [...document.querySelectorAll("main h2")].filter((h) => !h.closest(".hx"));
+    heads.forEach((h) => {
+      let k = 0;
+      const walk = (node) => [...node.childNodes].forEach((n) => {
+        if (n.nodeType === 1) return walk(n);
+        if (n.nodeType !== 3 || !n.textContent.trim()) return;
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.append(part); return; }
+          const w = document.createElement("span"), i = document.createElement("span");
+          w.className = "w"; i.textContent = part; i.style.setProperty("--k", k++); w.append(i); frag.append(w);
+        });
+        n.replaceWith(frag);
       });
-    }, { rootMargin: "0px 0px -6% 0px" });
-    tiles.forEach((t) => io.observe(t));
-  } else showAll();
+      walk(h);
+      h.classList.add("split");
+    });
+    watch(heads, (h) => h.classList.add("in"), "0px 0px -10% 0px");
+  }
+
+  // ---------- big figures count up from zero when they arrive; the page's own number is always what's left ----------
+  const ease = (t) => 1 - Math.pow(2, -10 * t);
+  const count = (el, delay) => {
+    const txt = el.textContent.trim(), m = txt.match(/^(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?$/);
+    if (!m) return;
+    const commas = m[1].includes(","), dec = m[2] ? m[2].length - 1 : 0, end = parseFloat(txt.replace(/,/g, ""));
+    const fmt = new Intl.NumberFormat("en-US", { useGrouping: commas, minimumFractionDigits: dec, maximumFractionDigits: dec });
+    el.style.display = "inline-block"; el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+    el.textContent = fmt.format(0);
+    setTimeout(() => {
+      const t0 = performance.now(), dur = end < 20 ? 900 : 1400;
+      const tick = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        el.textContent = p < 1 ? fmt.format(end * ease(p)) : txt;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      setTimeout(() => { el.textContent = txt; }, dur + 400);   // if frames stall (a background tab), the real figure still lands
+    }, delay);
+  };
+  if (!reduce) {
+    const first = !root.classList.contains("seen");
+    watch([...document.querySelectorAll(".hx-n .n, .fig .n, .ans-figs .n")].filter((n) => !n.closest(".gq")),
+      (n) => count(n, n.closest(".hx") ? (first ? 1850 : 700) : 150), "0px 0px -8% 0px");
+  }
+
+  // ---------- the footer's name builds itself, block by block ----------
+  const blocks = document.querySelector(".blocks");
+  if (blocks) {
+    [...blocks.children].forEach((b, j) => b.style.setProperty("--j", j));
+    watch([blocks], (b) => b.classList.add("in"), "0px 0px -15% 0px");
+  }
+
+  // ---------- the bar steps aside while you read down, and comes back when you scroll up ----------
+  const bar = document.querySelector(".bar"), menu = document.querySelector(".menu");
+  if (bar) {
+    let lastY = scrollY, ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = scrollY, d = y - lastY;
+        if (Math.abs(d) > 6) { bar.classList.toggle("tuck", d > 0 && y > 240 && !menu?.open); lastY = y; }
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  // ---------- the main buttons lean toward the pointer, a little ----------
+  if (!reduce && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll(".hx-acts .btn, .bar-btn, .act-go .btn").forEach((b) => {
+      b.addEventListener("pointermove", (e) => {
+        const r = b.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width / 2) / (r.width / 2), dy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+        b.style.translate = `${(dx * 6).toFixed(1)}px ${(dy * 4).toFixed(1)}px`;
+      });
+      b.addEventListener("pointerleave", () => { b.style.translate = ""; });
+    });
+  }
 
   // ---------- the story: one moment at a time; the reader turns the page ----------
   const box = document.querySelector(".story-box");

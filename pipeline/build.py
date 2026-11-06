@@ -253,7 +253,7 @@ class Site:
 <link rel="apple-touch-icon" href="{pre}apple-touch-icon.png">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#f5f5f2">
-{ld_tag}<script>document.documentElement.classList.add("js");setTimeout(function(){{if(!window.__board)document.documentElement.classList.remove("js")}},3000)</script>
+{ld_tag}<script>(function(d){{d.classList.add("js");try{{if(sessionStorage.getItem("pcp-seen"))d.classList.add("seen");else sessionStorage.setItem("pcp-seen","1")}}catch(e){{d.classList.add("seen")}}setTimeout(function(){{if(!window.__board)d.classList.remove("js")}},3000)}})(document.documentElement)</script>
 <link rel="preload" href="{pre}fonts/literata.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{pre}{asset('site.css')}">
 <script src="{pre}{asset('site.js')}" defer></script>
@@ -322,7 +322,7 @@ class Site:
         ld = None if not_found else {"@context": "https://schema.org", "@graph": graph}
         return f"""{self.head(path, title, desc, ld, base_tag=not_found)}
 <body>
-<a class="skip" href="#main">Skip to the content</a>
+{self.curtain() if main_cls == "home" else ""}<a class="skip" href="#main">Skip to the content</a>
 {self.bar(path)}
 <main id="main" class="{main_cls}">
 {body}
@@ -331,6 +331,11 @@ class Site:
 </body>
 </html>
 """
+
+    def curtain(self):
+        """The first page of a visit opens on the name, rising letter by letter on ink; CSS lifts it away. Decoration only."""
+        letters = "".join(f'<span style="--c:{n}">{E(c)}</span>' for n, c in enumerate(self.brand))
+        return f'<div class="curtain" aria-hidden="true"><p class="cur-name">{letters}</p></div>\n'
 
     def close_row(self, pre, headline, text, href, action, photo, pick=""):
         """The close: one row of the board, an accent tile flanked by a photograph and a colour, cropped at both edges."""
