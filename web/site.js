@@ -17,12 +17,29 @@
     els.forEach((t) => io.observe(t));
   };
 
+  // ---------- the loader: while the ink is up, entrances wait for it; a click to another page brings the ink back first ----------
+  const loader = document.querySelector(".loader");
+  const lag = loader && getComputedStyle(loader).display !== "none" ? 650 : 0;
+  const later = (fn) => (lag ? setTimeout(fn, lag) : fn());
+  if (!reduce && loader) {
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href]");
+      if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
+      const u = new URL(a.href, location.href);
+      if (u.origin !== location.origin || (u.pathname === location.pathname && u.search === location.search) || /\.(?!html?$)\w+$/.test(u.pathname)) return;
+      e.preventDefault();
+      root.classList.add("leaving");
+      setTimeout(() => { location.href = u.href; }, 480);
+    });
+    addEventListener("pageshow", (e) => { if (e.persisted) root.classList.remove("leaving"); });   // back to a page kept in memory
+  }
+
   // ---------- entrances: tiles rise in, a board at a time, staggered by position ----------
-  watch([...document.querySelectorAll(".rv")], (t) => {
+  later(() => watch([...document.querySelectorAll(".rv")], (t) => {
     const sib = [...(t.parentElement?.children || [])];
     t.style.transitionDelay = `${Math.min(6, Math.max(0, sib.indexOf(t))) * 75}ms`;
     t.classList.add("in");
-  });
+  }));
 
   // ---------- headings rise word by word: each word in a clipped span, the text itself unchanged ----------
   if (!reduce) {
@@ -44,7 +61,7 @@
       walk(h);
       h.classList.add("split");
     });
-    watch(heads, (h) => h.classList.add("in"), "0px 0px -10% 0px");
+    later(() => watch(heads, (h) => h.classList.add("in"), "0px 0px -10% 0px"));
   }
 
   // ---------- big figures count up from zero when they arrive; the page's own number is always what's left ----------
@@ -70,7 +87,7 @@
   if (!reduce) {
     const first = !root.classList.contains("seen");
     watch([...document.querySelectorAll(".hx-n .n, .fig .n, .ans-figs .n")].filter((n) => !n.closest(".gq")),
-      (n) => count(n, n.closest(".hx") ? (first ? 1850 : 700) : 150), "0px 0px -8% 0px");
+      (n) => count(n, (n.closest(".hx") ? (first ? 1850 : 700) : 150) + lag), "0px 0px -8% 0px");
   }
 
   // ---------- the footer's name builds itself, block by block ----------
@@ -146,6 +163,84 @@
       if (Math.abs(dx) > 50) dx < 0 ? show(Math.min(at + 1, steps.length - 1), 1) : show(Math.max(at - 1, 0), -1);
     });
     show(0, 0);
+
+    // wide screens with room for the whole box: scrolling down carries the moments across, the city builds with them
+    const sec = box.closest(".history"), wrap = box.querySelector(".steps");
+    const roomy = () => !reduce && matchMedia("(min-width: 901px)").matches && box.offsetHeight + 24 < innerHeight;
+    let on = false, run = 0;
+    const span = () => (steps.length - 1) * innerHeight * 0.7;      // how far you scroll to see all four
+    const paint = () => {
+      run = 0;
+      if (!on) return;
+      const top = parseFloat(box.style.getPropertyValue("--st")) || 0;
+      const p = Math.min(1, Math.max(0, (top - sec.getBoundingClientRect().top) / span()));
+      const sp = p * (steps.length - 1), n = Math.round(sp);
+      wrap.style.setProperty("--sp", sp.toFixed(4));
+      steps.forEach((s, i) => { s.style.opacity = Math.max(0, 1 - Math.abs(sp - i) * 1.4).toFixed(3); });
+      if (n !== at) { at = n; dots.forEach((d, i) => { d.classList.toggle("seen", i < at); i === at ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current"); });
+        box.dataset.stage = String(at); if (at >= 1) today?.setAttribute("loading", "eager"); }
+    };
+    const fit = () => {
+      const want = roomy();
+      if (want !== on) {
+        on = want;
+        box.classList.toggle("story-scroll", on); sec.classList.toggle("story-scroll", on);
+        steps.forEach((s) => { s.hidden = on ? false : s.hidden; s.style.opacity = ""; });
+        if (!on) { sec.style.height = ""; show(at, 0); }
+      }
+      if (on) {
+        box.style.setProperty("--st", `${Math.max(0, (innerHeight - box.offsetHeight) / 2)}px`);
+        sec.style.height = `${box.offsetHeight + span() + 8}px`;
+        paint();
+      }
+    };
+    // in scroll mode the dots and arrow keys scroll the page to that moment
+    const go = (i) => { if (!on) return false; scrollTo({ top: sec.offsetTop - (parseFloat(box.style.getPropertyValue("--st")) || 0) + span() * i / (steps.length - 1) + 1, behavior: "smooth" }); return true; };
+    dots.forEach((d, n) => d.addEventListener("click", (e) => { if (go(n)) e.stopImmediatePropagation(); }, true));
+    box.addEventListener("keydown", (e) => {
+      if (on && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); e.stopImmediatePropagation(); go(Math.min(steps.length - 1, Math.max(0, at + (e.key === "ArrowRight" ? 1 : -1)))); }
+    }, true);
+    addEventListener("scroll", () => { if (on && !run) run = requestAnimationFrame(paint); }, { passive: true });
+    addEventListener("resize", fit);
+    fit();
+  }
+
+  // ---------- sideways: the row pins to the screen and scrolling down moves it across. Without the script it is a row you swipe ----------
+  const rows = reduce ? [] : [...document.querySelectorAll(".hs")];
+  if (rows.length) {
+    let run = 0;
+    const move = () => {
+      run = 0;
+      rows.forEach((r) => {
+        const d = r._d || 0, p = d ? Math.min(1, Math.max(0, -r.getBoundingClientRect().top / d)) : 0;
+        r._t.style.transform = `translate3d(${(-p * d).toFixed(1)}px, 0, 0)`;
+        r.style.setProperty("--p", p.toFixed(4));
+        r._c.forEach((c) => {                    // each tile knows where it sits across the screen, for a little parallax
+          const b = c.getBoundingClientRect(), x = (b.left + b.width / 2) / innerWidth - 0.5;
+          c.style.setProperty("--x", Math.max(-1, Math.min(1, x)).toFixed(3));
+        });
+      });
+    };
+    const fit = () => {
+      rows.forEach((r) => {
+        r.classList.add("hs-on");
+        r._t = r.querySelector(".hs-track"); r._c = [...r._t.children];
+        r._d = Math.max(0, r._t.scrollWidth - r.querySelector(".hs-view").clientWidth);
+        r.style.height = r._d ? `${r._d + r.querySelector(".hs-pin").offsetHeight}px` : "";
+        if (!r._d) r.classList.remove("hs-on");
+      });
+      move();
+    };
+    // a keyboard user tabbing into a tile off to the side: scroll the page to where that tile is in view
+    rows.forEach((r) => r.addEventListener("focusin", (e) => {
+      const c = e.target.closest(".hs-track > *");
+      if (!c || !r._d) return;
+      scrollTo({ top: r.offsetTop + Math.min(r._d, Math.max(0, c.offsetLeft - 16)), behavior: "auto" });
+    }));
+    addEventListener("scroll", () => { if (!run) run = requestAnimationFrame(move); }, { passive: true });
+    addEventListener("resize", fit);
+    addEventListener("load", fit);
+    fit();
   }
 
   // ---------- jewellery: one finding at a time, then an offer to read the rest ----------

@@ -322,7 +322,7 @@ class Site:
         ld = None if not_found else {"@context": "https://schema.org", "@graph": graph}
         return f"""{self.head(path, title, desc, ld, base_tag=not_found)}
 <body>
-{self.curtain() if main_cls == "home" else ""}<a class="skip" href="#main">Skip to the content</a>
+{self.curtain() if main_cls == "home" else ""}{self.loader(title.split(" · ")[0])}<a class="skip" href="#main">Skip to the content</a>
 {self.bar(path)}
 <main id="main" class="{main_cls}">
 {body}
@@ -336,6 +336,13 @@ class Site:
         """The first page of a visit opens on the name, rising letter by letter on ink; CSS lifts it away. Decoration only."""
         letters = "".join(f'<span style="--c:{n}">{E(c)}</span>' for n, c in enumerate(self.brand))
         return f'<div class="curtain" aria-hidden="true"><p class="cur-name">{letters}</p></div>\n'
+
+    def loader(self, label):
+        """Every page opens on its own name on ink, which then lifts; a second panel covers the page as you leave. CSS-only; decoration."""
+        letters = "".join(f'<span style="--c:{n}">{E(c)}</span>' for n, c in enumerate(label))
+        site = "" if label == self.brand else f'<p class="ld-site"><span>{E(self.brand)}</span></p>'
+        return (f'<div class="loader" aria-hidden="true">{site}<p class="ld-page">{letters}</p><i class="ld-line"></i></div>'
+                '<div class="leave" aria-hidden="true"></div>\n')
 
     def close_row(self, pre, headline, text, href, action, photo, pick=""):
         """The close: one row of the board, an accent tile flanked by a photograph and a colour, cropped at both edges."""
@@ -561,9 +568,16 @@ class Site:
   {portrait}
   <div class="t t-plain s8 bio rv"><p class="statement">{self.f(A['paras'][0])}</p>{''.join(f'<p>{self.f(x)}</p>' for x in A['paras'][1:])}</div>
 </section>"""
-        method = f"""<section class="board method" id="method" aria-labelledby="m-h">
-  <div class="t tone-stone s12 rv"><h2 id="m-h">{E(A['method_headline'])}</h2>
-  <div class="cols">{''.join(f'<p>{self.f(x)}</p>' for x in A['method'])}</div></div>
+        tones = ["tone-stone", "tone-blush", "tone-pink", "tone-ink"]
+        rules = [re.match(r"\*\*(.+?)\*\*\s*(.*)", x).groups() for x in A['method']]
+        cards = "".join(f'<article class="hs-card {tones[i % 4]}"><h3 class="hs-i">{E(h)}</h3><p>{self.f(b)}</p></article>'
+                        for i, (h, b) in enumerate(rules))
+        method = f"""<section class="board method hs" id="method" aria-labelledby="m-h">
+  <div class="hs-pin">
+    <div class="hs-head rv"><h2 id="m-h">{E(A['method_headline'])}</h2><p class="hs-hint" aria-hidden="true">Keep scrolling</p></div>
+    <div class="hs-view"><div class="hs-track">{cards}</div></div>
+    <div class="hs-meter" aria-hidden="true"><i></i></div>
+  </div>
 </section>"""
         rows = "".join(f'<li><a href="{u}" rel="noopener" target="_blank"><span>{E(cap)}</span><span class="soft">{E(who)}</span></a></li>'
                        for alt, cap, who, u, *_ in PHOTOS.values())
