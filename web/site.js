@@ -67,6 +67,8 @@
   // ---------- big figures count up from zero when they arrive; the page's own number is always what's left ----------
   const ease = (t) => 1 - Math.pow(2, -10 * t);
   const count = (el, delay) => {
+    if (el.dataset.counted) return;               // once only: a late observer must not restart it from a half-counted value
+    el.dataset.counted = "1";
     const txt = el.textContent.trim(), m = txt.match(/^(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?$/);
     if (!m) return;
     const commas = m[1].includes(","), dec = m[2] ? m[2].length - 1 : 0, end = parseFloat(txt.replace(/,/g, ""));
