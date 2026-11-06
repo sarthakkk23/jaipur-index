@@ -22,7 +22,7 @@ home:
   title: "{{brand}} · Free data on Jaipur's industries, starting with cafés"
   description: >-
     Jaipur was built to trade. Free, independent data for anyone who runs or plans to start a business here:
-    The Café Paper is live, with {{cafes.scene.core_cafes}} cafés re-measured twice a month, and The
+    The Café Paper is live, with {{cafes.scene.core_cafes}} cafés re-measured every month, and The
     Jewellery Paper follows the jewellery trade each month.
   hero:
     headline: "Jaipur was built to trade."
@@ -34,16 +34,16 @@ home:
       - ["jewel", "The Jewellery Paper"]
     figures:
       - ["{{cafes.scene.core_cafes}}", "cafés measured"]
-      - ["{{cafes.findings}}", "café findings"]
-      - ["{{jewellery.findings}}", "jewellery findings"]
+      - ["{{cafes.scene.venues_tracked}}", "café listings read"]
+      - ["{{jewellery.gold_share}}%", "of the export zone ships gold"]
     skip: "Or take the long way round: the city's story first, then your trade."
     skip_go: "Start with the city"
     ticker:
       - "{{cafes.scene.core_cafes}} cafés measured"
       - "C-Scheme and Malviya Nagar"
-      - "{{cafes.findings}} café findings"
-      - "Re-measured every two weeks"
-      - "{{jewellery.findings}} jewellery findings"
+      - "{{cafes.scene.venues_tracked}} listings read"
+      - "Re-measured every month"
+      - "{{jewellery.gold_share}}% of the export zone is gold"
       - "Exports, tariffs, emeralds, gold"
       - "Every figure checked twice"
       - "Free. Nothing for sale"
@@ -72,11 +72,11 @@ home:
     soon: "Coming soon"
     cafes_head: "Cafés: live now."
     cafes_text: >-
-      {{cafes.scene.core_cafes}} cafés measured in C-Scheme and Malviya Nagar. Three of the {{cafes.findings}} findings:
+      {{cafes.scene.core_cafes}} cafés measured in C-Scheme and Malviya Nagar. Three of the findings:
     cafes_go: "Open The Café Paper"
     jewellery_head: "Jewellery: live now."
     jewellery_text: >-
-      {{jewellery.findings}} findings from public records: exports, the US tariff, the emerald trade, and what they
+      Findings from public records: exports, the US tariff, the emerald trade, and what they
       mean for makers and shops at home. Plus an owner's playbook, and the figures that moved this month.
     jewellery_go: "Open The Jewellery Paper"
     other_head: "Something else?"
@@ -98,26 +98,26 @@ home:
     linkedin: "LinkedIn"
     headline: "Get the findings as they land."
     text: >-
-      Free, on WhatsApp: fresh café findings twice a month, and the jewellery figures when they update each month.
+      Free, on WhatsApp: fresh café and jewellery findings every month, as they land.
     action: "Get free updates"
 
 # ---------------------------------------------------------------- cafés
 cafes:
   title: "The Café Paper · Café data for C-Scheme and Malviya Nagar · {{brand}}"
   description: >-
-    The Café Paper measures {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar every two weeks:
+    The Café Paper measures {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar every month:
     what customers reward, where the gaps are, in plain words. Free.
   headline: "The Café Paper."
   statement: >-
-    {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, counted, compared and re-measured every two
-    weeks. Every figure is an aggregate, with its source and its date.
+    {{cafes.scene.core_cafes}} cafés in C-Scheme and Malviya Nagar, counted, compared and re-measured every
+    month. Every figure is an aggregate, with its source and its date.
   action: "Open The Café Paper"
   act_num: "{{cafes.scene.core_cafes}}"
   act_cap: "cafés measured across C-Scheme and Malviya Nagar."
-  updated: "Updated {{cafes.updated}}. Re-measured every two weeks."
+  updated: "Updated {{cafes.updated}}. Re-measured every month."
   inside_word: "Inside"
   inside:
-    - ["insights/", "Insights", "{{cafes.findings}} findings, each one sentence and one number, with what it means for your café and where it stops."]
+    - ["insights/", "Insights", "The findings, each one sentence and one number, with what it means for your café and where it stops."]
     - ["playbook/", "Playbook", "The most common problems café owners here face, and a practical fix for each, with the maths shown."]
     - ["location/", "Location check", "Pick any spot and read its five-minute walk: cafés, gaps, and who is around to buy coffee."]
     - ["your-cafe/", "Your café", "Set your area, type and numbers, and see where you stand. It runs in your browser."]
@@ -142,16 +142,16 @@ cafes:
     over: "over"
     gap: "You were {d} points {dir}."
     done: "You were within ten points on {n} of {total}."
-    done_more: "There are {all} findings like these in The Café Paper, each with what it means for your café."
+    done_more: "There are more findings like these in The Café Paper, each with what it means for your café."
   findings_headline: "Things I didn't know."
   findings_lede: >-
-    Six of the {{cafes.findings}} findings, each graded for how far you can lean on it.
+    Six of the findings, each graded for how far you can lean on it.
   limit: "What it doesn't say:"
   how: "How I know"
   grades: {Strong: "Strong evidence", Moderate: "Moderate evidence", Weak: "Weak evidence"}
-  all: "Read all {{cafes.findings}} findings"
+  all: "Read every finding"
   close_headline: "Fresh café findings, free."
-  close_text: "Twice a month on WhatsApp: the newest findings and what they mean for your café."
+  close_text: "Every month on WhatsApp: the newest findings and what they mean for your café."
   close_action: "Get free updates"
 
 # ---------------------------------------------------------------- jewellery
@@ -165,8 +165,8 @@ jewellery:
     Jaipur cuts, sets and ships jewellery to the world. What's happening to that trade is in public data, buried in
     customs tables and trade reports. I dug through them, checked every figure, and put them in one place.
   action: "Open The Jewellery Paper"
-  act_num: "{{jewellery.findings}}"
-  act_cap: "findings from public records, each checked and sourced."
+  act_num: "{{jewellery.gold_share}}%"
+  act_cap: "of what Jaipur's export zone ships is gold jewellery. Every figure from a public record, checked."
   note: "Free. Figures updated each month. Nothing for sale."
   questions_headline: "What it answers."
   questions:
@@ -179,7 +179,7 @@ jewellery:
   how: "How I know"
   more: "Read it in full"
   next: "Next finding"
-  end_text: "That's three of the {{jewellery.findings}}. The rest, with their charts, are in The Jewellery Paper. Want to see them?"
+  end_text: "That's three of them. The rest, with their charts, are in The Jewellery Paper. Want to see them?"
   end_go: "Yes, take me there"
   again: "Start again"
   close_headline: "Get it each month."
@@ -219,11 +219,11 @@ about:
 updates:
   title: "Free updates · {{brand}}"
   description: >-
-    Free updates on WhatsApp: fresh café findings twice a month, The Jewellery Paper's figures each month,
+    Free updates on WhatsApp: fresh café findings and The Jewellery Paper's figures each month,
     and a vote on the next industry.
   headline: "Get the findings as they land."
   lede: >-
-    Free, on WhatsApp. Fresh café findings twice a month, the jewellery figures each month, and a say in what
+    Free, on WhatsApp. Fresh café findings and the jewellery figures each month, and a say in what
     comes next. Pick what you want.
   name: "Your name"
   contact: "Your WhatsApp number"
